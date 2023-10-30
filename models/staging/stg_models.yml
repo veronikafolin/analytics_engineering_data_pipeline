@@ -5,12 +5,9 @@ models:
     columns:
       - name: c_custkey
       - name: c_name
-      - name: c_address
       - name: c_nationkey
-      - name: c_phone
       - name: c_acctbal
       - name: c_mktsegment
-      - name: c_comment
   - name: stg_lineitem
     columns:
       - name: l_orderkey
@@ -30,7 +27,6 @@ models:
       - name: n_nationkey
       - name: n_name
       - name: n_regionkey
-      - name: n_comment
   - name: stg_orders
     columns:
       - name: o_orderkey
@@ -41,7 +37,6 @@ models:
       - name: o_orderpriority
       - name: o_clerk
       - name: o_shippriority
-      - name: o_comment
   - name: stg_part
     columns:
       - name: p_partkey
@@ -52,25 +47,19 @@ models:
       - name: p_size
       - name: p_container
       - name: p_retailprice
-      - name: p_comment
   - name: stg_partsupp
     columns:
       - name: ps_partkey
       - name: ps_suppkey
       - name: ps_availqty
       - name: ps_supplycost
-      - name: ps_comment
   - name: stg_region
     columns:
       - name: r_regionkey
       - name: r_name
-      - name: r_comment
   - name: stg_supplier
     columns:
       - name: s_suppkey
       - name: s_name
-      - name: s_address
       - name: s_nationkey
-      - name: s_phone
       - name: s_acctbal
-      - name: s_comment
