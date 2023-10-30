@@ -4,62 +4,234 @@ models:
   - name: stg_customer
     columns:
       - name: c_custkey
+        test:
+          - unique
+          - not_null
       - name: c_name
       - name: c_nationkey
+        test:
+          - not_null
+          - relationships:
+              to: ref('stg_nation')
+              field: n_nationkey
       - name: c_acctbal
+        test:
+          - not_null
       - name: c_mktsegment
+        test:
+          - not_null
   - name: stg_lineitem
     columns:
       - name: l_orderkey
+        test:
+          - not_null
+          - relationships:
+              to: ref('stg_order')
+              field: o_orderkey
       - name: l_partkey
+        test:
+          - not_null
+          - relationships:
+              to: ref('stg_part')
+              field: p_partkey
       - name: l_suppkey
-      - name: l_linenumber
+        test:
+          - not_null
+          - relationships:
+              to: ref('stg_supplier')
+              field: s_suppkey
       - name: l_quantity
-      - name: l_receiptdate
-      - name: l_returnflag
-      - name: l_shipdate
-      - name: l_shipinstruct
-      - name: l_shipmode
-      - name: l_suppkey
+        test:
+          - not_null
+      - name: l_extendedprice
+        test:
+          - not_null
+      - name: l_discount
+        test:
+          - not_null
       - name: l_tax
+        test:
+          - not_null
+      - name: l_returnflag
+        test:
+          - not_null
+          - accepted_values:
+              values:
+                - R
+                - A
+                - N
+      - name: l_linestatus
+        test:
+          - not_null
+          - accepted_values:
+              values:
+                - F
+                - O
+      - name: l_shipdate
+        test:
+          - not_null
+      - name: l_commitdate
+        test:
+          - not_null
+      - name: l_receiptdate
+        test:
+          - not_null
+      - name: l_shipinstruct
+        test:
+          - not_null
+          - accepted_values:
+                values:
+                  - DELIVER IN PERSON
+                  - COLLECT COD
+                  - NONE
+                  - TAKE BACK RETURN
+      - name: l_shipmode
+        test:
+          - not_null
+          - accepted_values:
+              values:
+                - REG AIR
+                - AIR
+                - RAIL
+                - SHIP
+                - TRUCK
+                - MAIL
+                - FOB
   - name: stg_nation
     columns:
       - name: n_nationkey
+        test:
+          - unique
+          - not_null
       - name: n_name
+        test:
+          - not_null
       - name: n_regionkey
+        test:
+          - not_null
+          - relationships:
+              to: ref('stg_region')
+              field: r_regionkey
   - name: stg_orders
     columns:
       - name: o_orderkey
+        test:
+          - unique
+          - not_null
       - name: o_custkey
+        test:
+          - not_null
+          - relationship:
+              to: ref('stg_customer')
+              field: c_custkey
       - name: o_orderstatus
+        test:
+          - not_null
+          - accepted_values:
+              values:
+                - F
+                - O
+                - P
       - name: o_totalprice
+        test:
+          - not_null
       - name: o_orderdate
+        test:
+          - not_null
       - name: o_orderpriority
+        test:
+          - not_null
+          - accepted_value:
+              values:
+                - 1-URGENT
+                - 2-HIGH
+                - 3-MEDIUM
+                - 4-NOT SPECIFIED
+                - 5-LOW
       - name: o_clerk
+        test:
+          - not_null
       - name: o_shippriority
+        test:
+          - not_null
   - name: stg_part
     columns:
       - name: p_partkey
+        test:
+          - unique
+          - not_null
       - name: p_name
+        test:
+          - not_null
       - name: p_mfgr
+        test:
+          - not_null
+          - accepted_values:
+              values:
+                - Manufacturer#1
+                - Manufacturer#2
+                - Manufacturer#3
+                - Manufacturer#4
+                - Manufacturer#5
       - name: p_brand
+        test:
+          - not_null
       - name: p_type
+        test:
+          - not_null
       - name: p_size
+        test:
+          - not_null
       - name: p_container
+        test:
+          - not_null
       - name: p_retailprice
+        test:
+          - not_null
   - name: stg_partsupp
     columns:
       - name: ps_partkey
+        test:
+          - not_null
+          - relationship:
+              to: ref('stg_part')
+              field: p_partkey
       - name: ps_suppkey
+        test:
+          - not_null
+          - relationship:
+              to: ref('stg_supplier')
+              field: s_suppkey
       - name: ps_availqty
+        test:
+          - not_null
       - name: ps_supplycost
+        test:
+          - not_null
   - name: stg_region
     columns:
       - name: r_regionkey
+        test:
+          - unique
+          - not_null
       - name: r_name
+        test:
+          - not_null
   - name: stg_supplier
     columns:
       - name: s_suppkey
+        test:
+          - unique
+          - not_null
       - name: s_name
+        test:
+          - not_null
       - name: s_nationkey
+        test:
+          - not_null
+          - relationship:
+              to: ref('stg_nation')
+              field: n_nationkey
       - name: s_acctbal
+        test:
+          - not_null
