@@ -1,0 +1,6 @@
+version: 2
+
+models:
+  - name: int_customer_negative_acctbal
+  - name: int_places
+  - name: int_customer_orders
