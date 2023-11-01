@@ -2,6 +2,8 @@ select
     l_orderkey,
     l_partkey,
     l_suppkey,
+    l_partkey || '-' || l_suppkey as l_partsuppkey,
+    l_linenumber,
     l_quantity,
     l_extendedprice,
     l_discount,
