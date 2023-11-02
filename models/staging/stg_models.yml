@@ -6,27 +6,27 @@ models:
     columns:
       - name: c_custkey
         description: Primary key for a customer.
-        test:
+        tests:
           - unique
           - not_null
       - name: c_name
         description: Name of the customer.
-        test:
+        tests:
           - not_null
       - name: c_nationkey
         description: Foreign key to stg_nation.n_nationkey.
-        test:
+        tests:
           - not_null
           - relationships:
               to: ref('stg_nation')
               field: n_nationkey
       - name: c_acctbal
         description: Customer account balance.
-        test:
+        tests:
           - not_null
       - name: c_mktsegment
         description: Customer market segment.
-        test:
+        tests:
           - not_null
   - name: stg_lineitem
     description: Staged data of an order line item.
@@ -38,54 +38,57 @@ models:
     columns:
       - name: l_orderkey
         description: Foreign key to stg_order.o_orderkey and first part of the composite primary key for an order line item.
-        test:
+        tests:
           - not_null
           - relationships:
               to: ref('stg_order')
               field: o_orderkey
       - name: l_partkey
         description: Foreign key to stg_part.p_partkey.
-        test:
+        tests:
           - not_null
           - relationships:
               to: ref('stg_part')
               field: p_partkey
       - name: l_suppkey
         description: Foreign key to stg_supplier.s_suppkey.
-        test:
+        tests:
           - not_null
           - relationships:
               to: ref('stg_supplier')
               field: s_suppkey
       - name: l_partsuppkey
         description: Surrogate key for the composite foreign key (PS_PARTKEY, PS_SUPPKEY).
-        test:
-          - relationship:
+        tests:
+          - relationships:
                 to: ref('stg_partsupp')
                 field: ps_surrogate_key
       - name: l_linenumber
         description: Unique identifier of a line in an order and second part of the composite primary key for an order line item.
-        test:
+        tests:
           - not_null
       - name: l_quantity
         description: Quantity purchased in the order for a certain product.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
       - name: l_extendedprice
         description: Revenue for a line item that not consider the discount application.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
       - name: l_discount
         description: Percentage discount on the product.
-        test:
+        tests:
           - not_null
       - name: l_tax
         description: Percentage of taxes on the product.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
       - name: l_returnflag
         description: '{{ doc("l_returnflag") }}'
-        test:
+        tests:
           - not_null
           - accepted_values:
               values:
@@ -94,7 +97,7 @@ models:
                 - N
       - name: l_linestatus
         description: '{{ doc("l_linestatus") }}'
-        test:
+        tests:
           - not_null
           - accepted_values:
               values:
@@ -102,19 +105,21 @@ models:
                 - O
       - name: l_shipdate
         description: Ship date of the item.
-        test:
+        tests:
           - not_null
+          - test_generic_dates_constraints:
+              next_date: l_receiptdate
       - name: l_commitdate
         description: Commit date of the item.
-        test:
+        tests:
           - not_null
       - name: l_receiptdate
         description: Receipt date of the item.
-        test:
+        tests:
           - not_null
       - name: l_shipinstruct
         description: Shipping instructions for the item.
-        test:
+        tests:
           - not_null
           - accepted_values:
                 values:
@@ -124,7 +129,7 @@ models:
                   - TAKE BACK RETURN
       - name: l_shipmode
         description: Shipping mode for the item.
-        test:
+        tests:
           - not_null
           - accepted_values:
               values:
@@ -140,16 +145,16 @@ models:
     columns:
       - name: n_nationkey
         description: Primary key for a nation.
-        test:
+        tests:
           - unique
           - not_null
       - name: n_name
         description: Name of a nation.
-        test:
+        tests:
           - not_null
       - name: n_regionkey
         description: Foreign key to stg_region.r_regionkey.
-        test:
+        tests:
           - not_null
           - relationships:
               to: ref('stg_region')
@@ -159,19 +164,19 @@ models:
     columns:
       - name: o_orderkey
         description: Primary key for an order.
-        test:
+        tests:
           - unique
           - not_null
       - name: o_custkey
         description: Foreign key to stg_customer.c_custkey.
-        test:
+        tests:
           - not_null
-          - relationship:
+          - relationships:
               to: ref('stg_customer')
               field: c_custkey
       - name: o_orderstatus
         description: '{{ doc("o_orderstatus") }}'
-        test:
+        tests:
           - not_null
           - accepted_values:
               values:
@@ -180,17 +185,18 @@ models:
                 - P
       - name: o_totalprice
         description: Total price of the order.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
       - name: o_orderdate
         description: Date of the order.
-        test:
+        tests:
           - not_null
       - name: o_orderpriority
         description: Priority of the order.
-        test:
+        tests:
           - not_null
-          - accepted_value:
+          - accepted_values:
               values:
                 - 1-URGENT
                 - 2-HIGH
@@ -199,7 +205,7 @@ models:
                 - 5-LOW
       - name: o_clerk
         description: Identification of the employee who processed the order.
-        test:
+        tests:
           - not_null
       - name: o_shippriority
         description: Shipping priority.
@@ -210,16 +216,16 @@ models:
     columns:
       - name: p_partkey
         description: Primary key for a product.
-        test:
+        tests:
           - unique
           - not_null
       - name: p_name
         description: Name of the product.
-        test:
+        tests:
           - not_null
       - name: p_mfgr
         description: Identifier of the product manufacturer.
-        test:
+        tests:
           - not_null
           - accepted_values:
               values:
@@ -230,24 +236,26 @@ models:
                 - Manufacturer#5
       - name: p_brand
         description: Identifier of the product brand.
-        test:
+        tests:
           - not_null
       - name: p_type
         description: Type of the product.
-        test:
+        tests:
           - not_null
       - name: p_size
         description: Size of the product.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
       - name: p_container
         description: Type of container for the product.
-        test:
+        tests:
           - not_null
       - name: p_retailprice
         description: Retail price of the product.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
   - name: stg_partsupp
     description: Staged data for a product sold by a supplier.
     tests:
@@ -258,58 +266,60 @@ models:
     columns:
       - name: ps_partkey
         description: Foreign key to stg_part.p_partkey and first part of the composite primary key for a product sold by a supplier.
-        test:
+        tests:
           - not_null
-          - relationship:
+          - relationships:
               to: ref('stg_part')
               field: p_partkey
       - name: ps_suppkey
         description: Foreign key to stg_supplier.s_suppkey and second part of the composite primary key for a product sold by a supplier.
-        test:
+        tests:
           - not_null
-          - relationship:
+          - relationships:
               to: ref('stg_supplier')
               field: s_suppkey
       - name: ps_availqty
         description: Product availability for the supplier.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
       - name: ps_supplycost
         description: Price of the product from a certain supplier.
-        test:
+        tests:
           - not_null
+          - test_generic_assert_positive_value
   - name: stg_region
     description: Staged view of regions served by suppliers.
     columns:
       - name: r_regionkey
         description: Primary key of a region.
-        test:
+        tests:
           - unique
           - not_null
       - name: r_name
         description: Name of the region.
-        test:
+        tests:
           - not_null
   - name: stg_supplier
     description: Staged data of suppliers.
     columns:
       - name: s_suppkey
         description: Primary key of a supplier.
-        test:
+        tests:
           - unique
           - not_null
       - name: s_name
         description: Name of the supplier.
-        test:
+        tests:
           - not_null
       - name: s_nationkey
         description: Foreign key to stg_nation.n_nationkey.
-        test:
+        tests:
           - not_null
-          - relationship:
+          - relationships:
               to: ref('stg_nation')
               field: n_nationkey
       - name: s_acctbal
         description: Supplier account balance.
-        test:
+        tests:
           - not_null
