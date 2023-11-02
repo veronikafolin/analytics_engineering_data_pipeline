@@ -7,3 +7,5 @@ models:
     description: All orders' information.
   - name: fct_lineitem
     description: All line items' information.
+  - name: kpi_customer_negative_acctbal
+    description: Customers who have a negative account balance.
