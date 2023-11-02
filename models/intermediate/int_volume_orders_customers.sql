@@ -22,6 +22,6 @@ final as (
         coalesce(customer_orders.number_of_orders, 0) as number_of_orders,
         customer_orders.sum_total_price
     from customer
-    left join customer_orders on customer_orders.o_custkey = customer.c_custkey
+    join customer_orders on customer_orders.o_custkey = customer.c_custkey
 )
 select * from final

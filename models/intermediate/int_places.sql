@@ -11,6 +11,6 @@ final as (
         region.r_name as pl_region_name
     from
         nation
-        left join region on nation.n_regionkey = region.r_regionkey
+        join region on nation.n_regionkey = region.r_regionkey
 )
 select * from final

@@ -14,7 +14,7 @@ final as (
         sum(lineitem.l_quantity) as sum_of_quantity,
         sum(lineitem.l_extendedprice) as total_revenue
     from lineitem
-    left join orders on orders.o_orderkey = lineitem.l_orderkey
+    join orders on orders.o_orderkey = lineitem.l_orderkey
     group by 1, 2
     order by 1
 )
