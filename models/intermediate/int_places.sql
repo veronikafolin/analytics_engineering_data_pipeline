@@ -6,9 +6,9 @@ region as (
 ),
 final as (
     select
-        nation.n_nationkey,
-        nation.n_name,
-        region.r_name
+        nation.n_nationkey as pl_nationkey,
+        nation.n_name as pl_nation_name,
+        region.r_name as pl_region_name
     from
         nation
         left join region on nation.n_regionkey = region.r_regionkey

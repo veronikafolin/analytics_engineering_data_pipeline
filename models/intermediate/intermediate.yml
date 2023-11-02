@@ -2,5 +2,10 @@ version: 2
 
 models:
   - name: int_customer_negative_acctbal
+    description: Customers who have a negative account balance.
   - name: int_places
-  - name: int_customer_orders
+    description: View that relates nations to the regions they belong to.
+  - name: int_volume_orders_partsupp
+    description: Volume of orders received from each supplier for a certain product.
+  - name: int_volume_orders_customers
+    description: Order volume for each customer
