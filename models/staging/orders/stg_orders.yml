@@ -1,0 +1,167 @@
+version: 2
+
+models:
+  - name: stg_lineitem
+    description: Staged data of an order line item.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - orderkey
+            - linenumber
+    columns:
+      - name: orderkey
+        description: Foreign key to stg_order.orderkey and first part of the composite primary key for an order line item.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_order')
+              field: orderkey
+      - name: partkey
+        description: Foreign key to stg_part.partkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_part')
+              field: partkey
+      - name: suppkey
+        description: Foreign key to stg_supplier.suppkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_supplier')
+              field: suppkey
+      - name: partsuppkey
+        description: Surrogate key for the composite foreign key (PARTKEY, SUPPKEY).
+        tests:
+          - relationships:
+                to: ref('stg_partsupp')
+                field: surrogate_key
+      - name: linenumber
+        description: Unique identifier of a line in an order and second part of the composite primary key for an order line item.
+        tests:
+          - not_null
+      - name: quantity
+        description: Quantity purchased in the order for a certain product.
+        tests:
+          - not_null
+          - test_generic_assert_positive_value
+      - name: extendedprice
+        description: Revenue for a line item that not consider the discount application.
+        tests:
+          - not_null
+          - test_generic_assert_positive_value
+      - name: discount
+        description: Percentage discount on the product.
+        tests:
+          - not_null
+      - name: tax
+        description: Percentage of taxes on the product.
+        tests:
+          - not_null
+          - test_generic_assert_positive_value
+      - name: returnflag
+        description: '{{ doc("returnflag") }}'
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - R
+                - A
+                - N
+      - name: linestatus
+        description: '{{ doc("linestatus") }}'
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - F
+                - O
+      - name: shipdate
+        description: Ship date of the item.
+        tests:
+          - not_null
+          - test_generic_dates_constraints:
+              next_date: receiptdate
+      - name: commitdate
+        description: Commit date of the item.
+        tests:
+          - not_null
+      - name: receiptdate
+        description: Receipt date of the item.
+        tests:
+          - not_null
+      - name: shipinstruct
+        description: Shipping instructions for the item.
+        tests:
+          - not_null
+          - accepted_values:
+                values:
+                  - DELIVER IN PERSON
+                  - COLLECT COD
+                  - NONE
+                  - TAKE BACK RETURN
+      - name: shipmode
+        description: Shipping mode for the item.
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - REG AIR
+                - AIR
+                - RAIL
+                - SHIP
+                - TRUCK
+                - MAIL
+                - FOB
+  - name: stg_orders
+    description: Staged data for customers' orders.
+    columns:
+      - name: orderkey
+        description: Primary key for an order.
+        tests:
+          - unique
+          - not_null
+      - name: custkey
+        description: Foreign key to stg_customer.custkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customer')
+              field: custkey
+      - name: orderstatus
+        description: '{{ doc("orderstatus") }}'
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - F
+                - O
+                - P
+      - name: totalprice
+        description: Total price of the order.
+        tests:
+          - not_null
+          - test_generic_assert_positive_value
+      - name: orderdate
+        description: Date of the order.
+        tests:
+          - not_null
+      - name: orderpriority
+        description: Priority of the order.
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 1-URGENT
+                - 2-HIGH
+                - 3-MEDIUM
+                - 4-NOT SPECIFIED
+                - 5-LOW
+      - name: clerk
+        description: Identification of the employee who processed the order.
+        tests:
+          - not_null
+      - name: shippriority
+        description: Shipping priority.
+        test:
+          - not_null

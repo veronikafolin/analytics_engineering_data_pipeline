@@ -1,4 +1,4 @@
-{% docs l_returnflag %}
+{% docs returnflag %}
 	
 One of the following values: 
 
@@ -10,7 +10,7 @@ One of the following values:
 
 {% enddocs %}
 
-{% docs l_linestatus %}
+{% docs linestatus %}
 	
 One of the following values: 
 
@@ -21,7 +21,7 @@ One of the following values:
 
 {% enddocs %}
 
-{% docs o_orderstatus %}
+{% docs orderstatus %}
 	
 One of the following values: 
 

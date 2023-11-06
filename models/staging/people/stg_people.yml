@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: stg_customer
+    description: Staged customer data.
+    columns:
+      - name: custkey
+        description: Primary key for a customer.
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: Name of the customer.
+        tests:
+          - not_null
+      - name: nationkey
+        description: Foreign key to stg_nation.n_nationkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_nation')
+              field: nationkey
+      - name: acctbal
+        description: Customer account balance.
+        tests:
+          - not_null
+      - name: mktsegment
+        description: Customer market segment.
+        tests:
+          - not_null
+  - name: stg_nation
+    description: Staged view of countries served by suppliers.
+    columns:
+      - name: nationkey
+        description: Primary key for a nation.
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: Name of a nation.
+        tests:
+          - not_null
+      - name: regionkey
+        description: Foreign key to stg_region.regionkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_region')
+              field: regionkey
+  - name: stg_region
+    description: Staged view of regions served by suppliers.
+    columns:
+      - name: regionkey
+        description: Primary key of a region.
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: Name of the region.
+        tests:
+          - not_null
+  - name: stg_supplier
+    description: Staged data of suppliers.
+    columns:
+      - name: suppkey
+        description: Primary key of a supplier.
+        tests:
+          - unique
+          - not_null
+      - name: name
+        description: Name of the supplier.
+        tests:
+          - not_null
+      - name: nationkey
+        description: Foreign key to stg_nation.nationkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_nation')
+              field: nationkey
+      - name: acctbal
+        description: Supplier account balance.
+        tests:
+          - not_null
