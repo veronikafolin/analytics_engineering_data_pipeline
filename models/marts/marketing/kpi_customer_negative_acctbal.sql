@@ -5,9 +5,7 @@ customer as (
 ),
 
 final as (
-    select *
-    from customer
-    where cust_acctbal < 0
+    {{ compute_negative_values('customer', 'cust_acctbal')}}
 )
 
 select * from final

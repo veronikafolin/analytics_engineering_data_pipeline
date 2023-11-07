@@ -9,3 +9,5 @@ models:
     description: All products' information sold by suppliers.
   - name: kpi_customer_negative_acctbal
     description: Customers who have a negative account balance.
+  - name: kpi_supplier_negative_acctbal
+    description: Suppliers who have a negative account balance.

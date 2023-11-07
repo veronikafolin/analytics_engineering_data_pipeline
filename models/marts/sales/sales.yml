@@ -8,4 +8,6 @@ models:
   - name: kpi_volume_sales_partsupp
     description: Volume of sales received from each supplier for a certain product.
   - name: kpi_volume_orders_customers
-    description: Order volume for each customer.
+    description: Orders' volume for each customer.
+  - name: kpi_volume_orders_by_region_and_nation
+    description: Orders' volume by nations and regions.
