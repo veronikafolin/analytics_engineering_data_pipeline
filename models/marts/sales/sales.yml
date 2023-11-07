@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: All orders' information.
+  - name: fct_sales
+    description: All sales' information.
+  - name: kpi_volume_sales_partsupp
+    description: Volume of sales received from each supplier for a certain product.
+  - name: kpi_volume_orders_customers
+    description: Order volume for each customer.

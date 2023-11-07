@@ -1,9 +1,5 @@
 version: 2
 
 models:
-  - name: int_places
-    description: View that relates nations to the regions they belong to.
-  - name: int_volume_orders_partsupp
-    description: Volume of orders received from each supplier for a certain product.
-  - name: int_volume_orders_customers
-    description: Order volume for each customer.
+  - name: int_nation
+    description: Relates nations to the regions they belong to.

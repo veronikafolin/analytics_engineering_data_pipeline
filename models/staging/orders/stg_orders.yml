@@ -35,7 +35,7 @@ models:
         tests:
           - relationships:
                 to: ref('stg_partsupp')
-                field: surrogate_key
+                field: partsuppkey
       - name: linenumber
         description: Unique identifier of a line in an order and second part of the composite primary key for an order line item.
         tests:

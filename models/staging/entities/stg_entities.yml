@@ -9,22 +9,22 @@ models:
         tests:
           - unique
           - not_null
-      - name: name
+      - name: cust_name
         description: Name of the customer.
         tests:
           - not_null
       - name: nationkey
-        description: Foreign key to stg_nation.n_nationkey.
+        description: Foreign key to stg_nation.nationkey.
         tests:
           - not_null
           - relationships:
               to: ref('stg_nation')
               field: nationkey
-      - name: acctbal
+      - name: cust_acctbal
         description: Customer account balance.
         tests:
           - not_null
-      - name: mktsegment
+      - name: cust_mktsegment
         description: Customer market segment.
         tests:
           - not_null
@@ -36,7 +36,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: name
+      - name: nation_name
         description: Name of a nation.
         tests:
           - not_null
@@ -55,7 +55,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: name
+      - name: region_name
         description: Name of the region.
         tests:
           - not_null
@@ -67,7 +67,7 @@ models:
         tests:
           - unique
           - not_null
-      - name: name
+      - name: supp_name
         description: Name of the supplier.
         tests:
           - not_null
@@ -78,7 +78,7 @@ models:
           - relationships:
               to: ref('stg_nation')
               field: nationkey
-      - name: acctbal
+      - name: supp_acctbal
         description: Supplier account balance.
         tests:
           - not_null

@@ -32,7 +32,7 @@ models:
         description: Type of the product.
         tests:
           - not_null
-      - name: size
+      - name: productsize
         description: Size of the product.
         tests:
           - not_null
@@ -68,6 +68,11 @@ models:
           - relationships:
               to: ref('stg_supplier')
               field: suppkey
+      - name: partsuppkey
+        description: Surrogate key for a for a product sold by a supplier.
+        tests:
+          - unique
+          - not_null
       - name: availqty
         description: Product availability for the supplier.
         tests:
