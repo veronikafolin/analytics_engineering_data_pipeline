@@ -15,7 +15,8 @@ Dataset documentation: https://docs.snowflake.com/en/user-guide/sample-data-tpch
 
 Try running the following commands:
 - `dbt run`
+- `dbt run -m kpi_volume_orders_by_params --vars '{groupBy: [cust_region_name]}'`
 - `dbt test`
 - `dbt build`
-- `dbt build --select <model_name>`
+- `dbt build --m <model_name>`
 - `dbt docs generate`
