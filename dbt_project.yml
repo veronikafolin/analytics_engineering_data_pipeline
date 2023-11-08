@@ -27,8 +27,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 models:
-  dbt_core_demo:
-    staging:
-      +materialized: view
+  dbt_core_reusable_demo:
     marts:
-      +materialized: table
+      marketing:
+        +materialized: table
+      sales:
+        +materialized: table
