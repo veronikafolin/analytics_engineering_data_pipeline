@@ -7,7 +7,7 @@ models:
     description: All sales' information.
   - name: kpi_volume_sales_partsupp
     description: Volume of sales received from each supplier for a certain product.
-  - name: kpi_volume_orders_customers
-    description: Orders' volume for each customer.
-  - name: kpi_volume_orders_by_region_and_nation
-    description: Orders' volume by nations and regions.
+  - name: kpi_volume_orders_by_params
+    description: Orders' volume grouped by columns given by console params and macro args.
+  - name: kpi_volume_orders_groupBy_where
+    description: Orders' volume grouped by columns and filtered by clauses given by console.
