@@ -10,11 +10,11 @@ models:
             - linenumber
     columns:
       - name: orderkey
-        description: Foreign key to stg_order.orderkey and first part of the composite primary key for an order line item.
+        description: Foreign key to stg_orders.orderkey and first part of the composite primary key for an order line item.
         tests:
           - not_null
           - relationships:
-              to: ref('stg_order')
+              to: ref('stg_orders')
               field: orderkey
       - name: partkey
         description: Foreign key to stg_part.partkey.

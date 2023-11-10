@@ -10,11 +10,11 @@ nation as (
 
 final as (
     select
-        suppkey,
-        supp_name,
-        supp_acctbal,
-        nation_name as supp_nation_name,
-        region_name as supp_region_name
+        supplier.suppkey,
+        supplier.supp_name,
+        supplier.supp_acctbal,
+        nation.nation_name as supp_nation_name,
+        nation.region_name as supp_region_name
     from supplier
     join nation using(nationkey)
 )

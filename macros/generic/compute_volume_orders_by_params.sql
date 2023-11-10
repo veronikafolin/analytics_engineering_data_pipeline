@@ -1,14 +1,8 @@
 {% macro compute_volume_orders_by_params() %}
 
 {% set columns = [] %}
-
-{% for key, value in kwargs.items() %}
-{% do columns.append(value) %}
-{% endfor %}
-
-{% for value in var("groupBy") %}
-{% do columns.append(value) %}
-{% endfor %}
+{% do columns.append(kwargs.items()["groupBy"]) %}
+{% do columns.append(var("groupBy")) %}
 
 select
     {% for value in columns %}

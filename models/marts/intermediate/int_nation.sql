@@ -9,7 +9,10 @@ region as (
 ),
 
 final as (
-    select *
+    select
+        nation.nationkey,
+        nation.nation_name,
+        region.region_name
     from nation
     join region using(regionkey)
 )
