@@ -1,7 +1,7 @@
 select
     ps_partkey as partkey,
     ps_suppkey as suppkey,
-    ps_partkey || '-' || ps_suppkey as partsuppkey,
+    {{ dbt_utils.generate_surrogate_key(['partkey', 'suppkey'])}} as partsuppkey,
     ps_availqty as availqty,
     ps_supplycost as supplycost
 

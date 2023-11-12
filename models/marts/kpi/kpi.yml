@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: kpi_customer_negative_acctbal
+    description: Customers who have a negative account balance.
+  - name: kpi_supplier_negative_acctbal
+    description: Suppliers who have a negative account balance.
+  - name: kpi_volume_sales_partsupp
+    description: Volume of sales received from each supplier for a certain product.
+  - name: kpi_volume_orders_groupBy_where
+    description: Orders' volume grouped by columns and filtered by clauses given by console.

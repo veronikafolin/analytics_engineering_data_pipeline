@@ -1,8 +1,7 @@
 {% macro compute_volume_orders_groupBy_where() %}
 
 {% set groupBycolumns = var("groupBy") %}
-
-{% set filters = [var("filter")] %}
+{% set filters = var("filters") %}
 
 select
     {% for col in groupBycolumns %}
@@ -17,9 +16,11 @@ from
 {% for filter in filters %}
 where {{filter["field"]}} = '{{filter["value"]}}'
 {% endfor %}
-group by
-    {% for col in groupBycolumns %}
-    {{col}}{% if not loop.last %},{% endif %}
-    {% endfor %}
+{% if groupBycolumns|length > 0 %}
+    group by
+        {% for col in groupBycolumns %}
+        {{col}}{% if not loop.last %},{% endif %}
+        {% endfor %}
+{% endif %}
 
 {% endmacro %}

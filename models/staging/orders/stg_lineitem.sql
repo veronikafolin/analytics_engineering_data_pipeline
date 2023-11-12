@@ -1,9 +1,10 @@
 select
     l_orderkey as orderkey,
+    l_linenumber as linenumber,
+    {{ dbt_utils.generate_surrogate_key(['orderkey', 'linenumber'])}} as lineitemkey,
     l_partkey as partkey,
     l_suppkey as suppkey,
-    l_partkey || '-' || l_suppkey as partsuppkey,
-    l_linenumber as linenumber,
+    {{ dbt_utils.generate_surrogate_key(['partkey', 'suppkey'])}} as partsuppkey,
     CAST(l_quantity AS int) as quantity,
     l_extendedprice as extendedprice,
     l_discount as discount,

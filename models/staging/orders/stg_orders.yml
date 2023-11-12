@@ -16,6 +16,15 @@ models:
           - relationships:
               to: ref('stg_orders')
               field: orderkey
+      - name: linenumber
+        description: Unique identifier of a line in an order and second part of the composite primary key for an order line item.
+        tests:
+         - not_null
+      - name: lineitemkey
+        description: Surrogate key for a for a lineitem.
+        tests:
+         - unique
+         - not_null
       - name: partkey
         description: Foreign key to stg_part.partkey.
         tests:
@@ -36,10 +45,6 @@ models:
           - relationships:
                 to: ref('stg_partsupp')
                 field: partsuppkey
-      - name: linenumber
-        description: Unique identifier of a line in an order and second part of the composite primary key for an order line item.
-        tests:
-          - not_null
       - name: quantity
         description: Quantity purchased in the order for a certain product.
         tests:

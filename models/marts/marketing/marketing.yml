@@ -5,9 +5,5 @@ models:
     description: All suppliers' information.
   - name: dim_customer
     description: All customers' information.
-  - name: dim_part
+  - name: fct_inventory
     description: All products' information sold by suppliers.
-  - name: kpi_customer_negative_acctbal
-    description: Customers who have a negative account balance.
-  - name: kpi_supplier_negative_acctbal
-    description: Suppliers who have a negative account balance.
