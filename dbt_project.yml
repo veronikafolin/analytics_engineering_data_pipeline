@@ -26,6 +26,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 vars:
   groupBy: []
   filters: []
+  startPeriod: '1994-01-01'
+  endPeriod: '1994-12-31'
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models

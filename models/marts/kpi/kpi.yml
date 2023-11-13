@@ -11,3 +11,8 @@ models:
     description: Orders' volume grouped by columns and filtered by clauses given by console.
   - name: kpi_revenue
     description: Total sales generated from customer orders.
+  - name: kpi_average_order_value
+    description: The average value of each customer order.
+  - name: kpi_customer_churn_rate
+    description: The percentage of customers who stop doing business with you over a specific time period.
+
