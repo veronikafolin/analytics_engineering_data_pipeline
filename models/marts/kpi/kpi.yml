@@ -15,4 +15,5 @@ models:
     description: The average value of each customer order.
   - name: kpi_customer_churn_rate
     description: The percentage of customers who stop doing business with you over a specific time period.
-
+  - name: kpi_customer_retention_rate
+    description: The percentage of customers who continue to do business with you over a specific time period.
