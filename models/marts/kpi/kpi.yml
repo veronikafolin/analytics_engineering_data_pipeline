@@ -19,3 +19,7 @@ models:
     description: The percentage of customers who continue to do business with you over a specific time period.
   - name: kpi_order_fulfillment_time
     description: The average time it takes to process and deliver customer orders.
+  - name: kpi_gross_profit_margin
+    description: The percentage of revenue that represents gross profit.
+  - name: kpi_supplier_lead_time
+    description: The time it takes suppliers to deliver orders.
