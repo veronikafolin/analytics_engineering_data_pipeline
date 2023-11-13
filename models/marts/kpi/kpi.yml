@@ -17,3 +17,5 @@ models:
     description: The percentage of customers who stop doing business with you over a specific time period.
   - name: kpi_customer_retention_rate
     description: The percentage of customers who continue to do business with you over a specific time period.
+  - name: kpi_order_fulfillment_time
+    description: The average time it takes to process and deliver customer orders.
