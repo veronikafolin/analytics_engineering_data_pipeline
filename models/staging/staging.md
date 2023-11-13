@@ -25,7 +25,7 @@ One of the following values:
 	
 One of the following values: 
 
-| linestatus | definition                                                                                                |
+| orderstatus | definition                                                                                                |
 |------------|-----------------------------------------------------------------------------------------------------------|
 | F          | Fulfilled - all lineitems of this order have L_LINESTATUS set to "F". |
 | O          | Open - all lineitems of this order have L_LINESTATUS set to "O".   |
