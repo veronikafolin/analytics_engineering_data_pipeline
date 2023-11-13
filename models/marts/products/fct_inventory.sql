@@ -12,6 +12,7 @@ final as (
     select
         partsupp.partkey,
         partsupp.suppkey,
+        partsupp.partsuppkey,
         partsupp.availqty,
         partsupp.supplycost,
         part.name as part_name,
