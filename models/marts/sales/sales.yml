@@ -4,6 +4,8 @@ models:
   - name: fct_orders
     description: All orders' information.
   - name: fct_sales
-    description: All sales' information.
+    description: All sales' information, per order.
   - name: fct_sales_per_customer
     description: All sales' information, per customer.
+  - name: fct_sales_per_supplier
+    description: All sales' information, per supplier.

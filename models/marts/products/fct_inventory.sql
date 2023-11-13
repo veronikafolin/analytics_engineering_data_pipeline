@@ -1,7 +1,7 @@
 with
 
 part as (
-    select * from {{ref('stg_part')}}
+    select * from {{ref('dim_part')}}
 ),
 
 partsupp as (
@@ -14,11 +14,11 @@ final as (
         partsupp.suppkey,
         partsupp.availqty,
         partsupp.supplycost,
-        part.name,
-        part.manufacturer,
-        part.brand,
-        part.type,
-        part.retailprice
+        part.name as part_name,
+        part.manufacturer as part_manufacturer,
+        part.brand as part_brand,
+        part.type as part_type,
+        part.retailprice as part_retailprice
     from partsupp
     join part using(partkey)
 )

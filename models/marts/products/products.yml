@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: fct_inventory
+    description: All products' information, per suppliers.
+  - name: dim_part
+    description: All products' information.

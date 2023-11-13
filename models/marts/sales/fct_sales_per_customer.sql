@@ -10,12 +10,12 @@ orders as (
 
 final as (
     select
+        lineitem.orderkey,
+        lineitem.partsuppkey,
         orders.custkey,
         orders.cust_mktsegment,
         orders.cust_nation_name,
         orders.cust_region_name,
-        lineitem.orderkey,
-        lineitem.partsuppkey,
         lineitem.quantity,
         lineitem.extendedprice,
         lineitem.discount,
@@ -30,7 +30,6 @@ final as (
         {{ compute_discounted_extended_price_plus_tax('extendedprice', 'discount', 'tax') }} as discounted_extended_price_plus_tax
     from lineitem
     join orders using(orderkey)
-    order by orders.orderdate
 )
 
 select * from final

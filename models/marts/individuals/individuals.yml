@@ -5,5 +5,3 @@ models:
     description: All suppliers' information.
   - name: dim_customer
     description: All customers' information.
-  - name: fct_inventory
-    description: All products' information sold by suppliers.
