@@ -27,8 +27,8 @@ lost_customers as (
 
 final as (
     select
-        (select count(lost_customers.*) from lost_customers)/
-        (select count(customers_beginning_of_period.*) from customers_beginning_of_period)
+        ((select count(*) from lost_customers)/
+        (select count(*) from customers_beginning_of_period)) * 100
         as customer_churn_rate
 )
 
