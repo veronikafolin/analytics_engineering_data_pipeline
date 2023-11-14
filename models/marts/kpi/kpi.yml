@@ -27,3 +27,5 @@ models:
     description: The percentage of orders that are returned by customers.
   - name: kpi_product_popularity
     description: Identifying the most popular products among customers.
+  - name: kpi_order_accuracy_rate
+    description: The percentage of orders that are fulfilled correctly without errors.
