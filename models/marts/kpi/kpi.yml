@@ -29,3 +29,5 @@ models:
     description: Identifying the most popular products among customers.
   - name: kpi_order_accuracy_rate
     description: The percentage of orders that are fulfilled correctly without errors.
+  - name: kpi_customer_segmentation
+    description: Analyzing the distribution of customers grouped by columns and filtered by clauses given by console.
