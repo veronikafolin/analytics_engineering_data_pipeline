@@ -25,3 +25,5 @@ models:
     description: The time it takes suppliers to deliver orders.
   - name: kpi_order_return_rate
     description: The percentage of orders that are returned by customers.
+  - name: kpi_product_popularity
+    description: Identifying the most popular products among customers.
