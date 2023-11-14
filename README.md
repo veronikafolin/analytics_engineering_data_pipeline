@@ -15,7 +15,7 @@ Dataset documentation: https://docs.snowflake.com/en/user-guide/sample-data-tpch
 
 Try running the following commands:
 - `dbt run`
-- `dbt run -m kpi_volume_orders_groupBy_where --vars '{groupBy: [cust_region_name], filters: [{field: orderstatus, value: F}]}'`
+- `dbt run -m kpi_customer_segmentation --vars '{groupBy: [cust_mktsegment], filters: [{field: cust_region_name, value: AMERICA}]}'`
 - `dbt test`
 - `dbt build`
 - `dbt build -m <model_name>`
