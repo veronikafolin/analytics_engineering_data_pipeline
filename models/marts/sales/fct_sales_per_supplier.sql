@@ -10,6 +10,7 @@ supplier as (
 
 final as (
     select
+        lineitem.lineitemkey,
         lineitem.orderkey,
         lineitem.partsuppkey,
         supplier.suppkey,
