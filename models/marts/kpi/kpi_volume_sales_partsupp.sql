@@ -13,7 +13,7 @@ final as (
         sum(quantity) as sum_of_quantity,
         sum(extendedprice) as total_revenue
     from sales
-    group by 1
+    group by partsuppkey
 )
 
 select * from final

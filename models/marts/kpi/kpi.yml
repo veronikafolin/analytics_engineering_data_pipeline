@@ -3,12 +3,10 @@ version: 2
 models:
   - name: kpi_customer_negative_acctbal
     description: Customers who have a negative account balance.
-  - name: kpi_supplier_negative_acctbal
-    description: Suppliers who have a negative account balance.
   - name: kpi_volume_sales_partsupp
     description: Volume of sales received from each supplier for a certain product.
-  - name: kpi_volume_orders_groupBy_where
-    description: Orders' volume grouped by columns and filtered by clauses given by console.
+  - name: kpi_volume_orders
+    description: All information about orders' volume.
   - name: kpi_revenue
     description: Total sales generated from customer orders.
   - name: kpi_average_order_value
@@ -30,4 +28,4 @@ models:
   - name: kpi_order_accuracy_rate
     description: The percentage of orders that are fulfilled correctly without errors.
   - name: kpi_customer_segmentation
-    description: Analyzing the distribution of customers grouped by columns and filtered by clauses given by console.
+    description: Analyzing the distribution of customers.

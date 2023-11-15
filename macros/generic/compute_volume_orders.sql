@@ -1,4 +1,4 @@
-{% macro compute_volume_orders_groupBy_where() %}
+{% macro compute_volume_orders() %}
 
 {% set groupBycolumns = var("groupBy") %}
 {% set filters = var("filters") %}
