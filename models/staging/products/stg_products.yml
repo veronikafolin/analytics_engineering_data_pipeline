@@ -36,7 +36,8 @@ models:
         description: Size of the product.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0
       - name: container
         description: Type of container for the product.
         tests:
@@ -45,7 +46,8 @@ models:
         description: Retail price of the product.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0
   - name: stg_partsupp
     description: Staged data for a product sold by a supplier.
     tests:
@@ -77,9 +79,11 @@ models:
         description: Product availability for the supplier.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0
       - name: supplycost
         description: Price of the product from a certain supplier.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0

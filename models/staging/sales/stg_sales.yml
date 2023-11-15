@@ -49,21 +49,27 @@ models:
         description: Quantity purchased in the order for a certain product.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0
       - name: extendedprice
         description: Revenue for a line item that not consider the discount application.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0
       - name: discount
         description: Percentage discount on the product.
         tests:
           - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
       - name: tax
         description: Percentage of taxes on the product.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0
       - name: returnflag
         description: '{{ doc("returnflag") }}'
         tests:
@@ -85,16 +91,20 @@ models:
         description: Ship date of the item.
         tests:
           - not_null
-          - test_generic_dates_constraints:
-              next_date: receiptdate
+          - dbt_utils.accepted_range:
+              max_value: "receiptdate"
       - name: commitdate
         description: Commit date of the item.
         tests:
           - not_null
+          - dbt_utils.accepted_range:
+                max_value: "getdate()"
       - name: receiptdate
         description: Receipt date of the item.
         tests:
           - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
       - name: shipinstruct
         description: Shipping instructions for the item.
         tests:
@@ -146,11 +156,14 @@ models:
         description: Total price of the order.
         tests:
           - not_null
-          - test_generic_assert_positive_value
+          - dbt_utils.accepted_range:
+              min_value: 0
       - name: orderdate
         description: Date of the order.
         tests:
           - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
       - name: orderpriority
         description: Priority of the order.
         tests:
