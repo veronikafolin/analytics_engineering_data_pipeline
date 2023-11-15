@@ -4,7 +4,7 @@
 with
 
 orders as (
-    select * from {{ref('stg_orders')}}
+    select * from {{ref('fct_orders')}}
 ),
 
 customers_beginning_of_period as (
