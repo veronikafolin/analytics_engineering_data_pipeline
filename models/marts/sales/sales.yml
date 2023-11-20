@@ -14,7 +14,3 @@ models:
         tests:
           - dbt_utils.accepted_range:
               min_value: 0
-  - name: fct_sales_per_customer
-    description: All sales' information, per customer.
-  - name: fct_sales_per_supplier
-    description: All sales' information, per supplier.
