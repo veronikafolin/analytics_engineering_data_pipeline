@@ -59,6 +59,8 @@ models:
         description: Name of the region.
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_in_set:
+                value_set: [ 'AFRICA', 'AMERICA', 'ASIA', 'EUROPE', 'MIDDLE EAST' ]
   - name: stg_supplier
     description: Staged data of suppliers.
     columns:

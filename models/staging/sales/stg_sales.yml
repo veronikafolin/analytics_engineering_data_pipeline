@@ -93,18 +93,24 @@ models:
           - not_null
           - dbt_utils.accepted_range:
               max_value: "receiptdate"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
       - name: commitdate
         description: Commit date of the item.
         tests:
           - not_null
           - dbt_utils.accepted_range:
                 max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
       - name: receiptdate
         description: Receipt date of the item.
         tests:
           - not_null
           - dbt_utils.accepted_range:
               max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
       - name: shipinstruct
         description: Shipping instructions for the item.
         tests:
@@ -164,6 +170,8 @@ models:
           - not_null
           - dbt_utils.accepted_range:
               max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
       - name: orderpriority
         description: Priority of the order.
         tests:
