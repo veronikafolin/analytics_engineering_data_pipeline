@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: sales_time
+    description: The time it takes to process and deliver orders.
+  - name: volume_orders
+    description: All information about orders' volume.
+  - name: volume_sales
+    description: All information about sales' volume.
+  - name: volume_profit
+    description: Profits from sales.
+  - name: acquired_customer
+    description: Customers who start to do business with you over a specific time period.
+  - name: lost_customer
+    description: Customers who stop doing business with you over a specific time period.
