@@ -3,10 +3,6 @@ version: 2
 models:
   - name: kpi_customer_negative_acctbal
     description: Customers who have a negative account balance.
-  - name: kpi_volume_sales
-    description: All information about sales' volume.
-  - name: kpi_volume_orders
-    description: All information about orders' volume.
   - name: kpi_revenue
     description: Total sales generated from customer orders.
   - name: kpi_average_order_value
@@ -14,7 +10,7 @@ models:
   - name: kpi_customer_churn_rate
     description: The percentage of customers who stop doing business with you over a specific time period.
   - name: kpi_customer_retention_rate
-    description: The percentage of customers who continue to do business with you over a specific time period.
+    description: The percentage of customers who start to do business with you over a specific time period.
   - name: kpi_order_fulfillment_time
     description: The average time it takes to process and deliver customer orders.
   - name: kpi_gross_profit_margin

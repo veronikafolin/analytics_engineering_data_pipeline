@@ -1,6 +1,3 @@
-{% set groupBycolumns = var("groupBy") %}
-{% set filters = var("filters") %}
-
 with
 
 customers as (
@@ -9,20 +6,11 @@ customers as (
 
 final as (
     select
-    {% for col in groupBycolumns %}
-        {{col}},
-    {% endfor %}
+        {{ write_select_groupByColumns_by_vars() }}
         count(custkey) as number_of_customers
     from customers
-    {% for filter in filters %}
-    where {{filter["field"]}} = '{{filter["value"]}}'
-    {% endfor %}
-    {% if groupBycolumns|length > 0 %}
-        group by
-            {% for col in groupBycolumns %}
-            {{col}}{% if not loop.last %},{% endif %}
-            {% endfor %}
-    {% endif %}
+    {{ write_where_by_vars() }}
+    {{ write_groupBY_groupByColumns_by_vars() }}
 )
 
 select * from final

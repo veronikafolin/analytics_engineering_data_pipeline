@@ -1,7 +1,7 @@
 with
 
 sales_per_customer as (
-    select * from {{ref('fct_sales_per_customer')}}
+    select * from {{ref('fct_sales')}}
 ),
 
 final as (
