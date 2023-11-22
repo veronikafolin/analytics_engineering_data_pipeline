@@ -141,6 +141,10 @@ models:
          combination_of_columns:
            - orderkey
            - updated_at
+     - dbt_utils.recency:
+         datepart: day
+         field: updated_at
+         interval: 10
     columns:
       - name: orderkey
         description: Primary key for an order.
