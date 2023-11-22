@@ -1,3 +1,7 @@
+{{config (
+    cluster_by=['updated_at']
+)}}
+
 with
 
 orders as (
@@ -20,7 +24,10 @@ final as (
         customer.custkey,
         customer.cust_mktsegment,
         customer.cust_nation_name,
-        customer.cust_region_name
+        customer.cust_region_name,
+        orders.updated_at,
+        orders.valid_from,
+        orders.valid_to
     from orders
     join customer using(custkey)
 )

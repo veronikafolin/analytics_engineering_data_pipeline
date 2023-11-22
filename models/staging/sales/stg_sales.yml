@@ -136,11 +136,15 @@ models:
                 - FOB
   - name: stg_orders
     description: Staged data for customers' orders.
+    tests:
+     - dbt_utils.unique_combination_of_columns:
+         combination_of_columns:
+           - orderkey
+           - updated_at
     columns:
       - name: orderkey
         description: Primary key for an order.
         tests:
-          - unique
           - not_null
       - name: custkey
         description: Foreign key to stg_customer.custkey.
@@ -189,5 +193,23 @@ models:
           - not_null
       - name: shippriority
         description: Shipping priority.
-        test:
+        tests:
           - not_null
+      - name: updated_at
+        description: Last update of the data.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+      - name: valid_from
+        description: Time when this snapshot row was first inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+      - name: valid_to
+        description: Time when this row became invalidated.
