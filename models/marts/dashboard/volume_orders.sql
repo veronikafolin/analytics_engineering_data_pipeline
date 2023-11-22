@@ -11,7 +11,7 @@ final as (
         max(orderdate) as most_recent_order_date,
         count(orderkey) as number_of_orders,
         count(distinct custkey) as number_of_customers,
-        sum(totalprice) as total_revenue
+        sum(totalprice) as sum_totalprice
     from orders
     {{ write_where_by_vars() }}
     {{ write_groupBY_groupByColumns_by_vars() }}
