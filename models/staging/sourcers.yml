@@ -13,3 +13,9 @@ sources:
       - name: partsupp
       - name: region
       - name: supplier
+  - name: elementary
+    database: analytics
+    schema: dbt_core_reusable_demo_elementary
+    tables:
+      - name: dbt_tests
+      - name: elementary_test_results
