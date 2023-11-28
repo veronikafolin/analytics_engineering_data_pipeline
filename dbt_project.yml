@@ -40,11 +40,4 @@ models:
     # enabled: "{{ target.name in ['prod','analytics'] }}"
   dbt_core_reusable_demo:
     marts:
-      marketing:
-        +materialized: table
-      sales:
-        +materialized: table
-      kpi:
-        +materialized: table
-      dashboard:
         +materialized: table

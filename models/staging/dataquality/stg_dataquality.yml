@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_dbt_tests
+  - name: stg_elementary_test_results
