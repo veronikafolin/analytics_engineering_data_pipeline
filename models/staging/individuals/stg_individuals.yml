@@ -3,6 +3,14 @@ version: 2
 models:
   - name: stg_customer
     description: Staged customer data.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - custkey
+            - valid_from
+      - dbt_utils.equal_rowcount:
+          tags: 'model_freshness'
+          compare_model: ref('customer_snapshot')
     columns:
       - name: custkey
         description: Primary key for a customer.
@@ -28,6 +36,16 @@ models:
         description: Customer market segment.
         tests:
           - not_null
+      - name: valid_from
+        description: Time when this snapshot row was first inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+      - name: valid_to
+        description: Time when this row became invalidated.
   - name: stg_nation
     description: Staged view of countries served by suppliers.
     columns:
