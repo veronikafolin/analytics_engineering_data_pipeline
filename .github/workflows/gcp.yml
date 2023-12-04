@@ -15,16 +15,27 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+   syncronize:
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      runs-on: ubuntu-latest
+      
+      permissions:
+        contents: 'read'
+        id-token: 'write'
 
-      - name: Cloud Storage Uploader
-        uses: google-github-actions/upload-cloud-storage@v1.0.3
-            
+      steps:
+      - id: 'checkout'
+        uses: 'actions/checkout@v3'
+  
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+  
+      - id: 'upload-file'
+        uses: 'google-github-actions/upload-cloud-storage@v1'
+        with:
+          path: 'snapshots/orders_snapshot.sql'
+          destination: 'europe-west4-demo-dbt-snowf-15fd2dcb-bucket/data/dbt/snapshots'
+              
