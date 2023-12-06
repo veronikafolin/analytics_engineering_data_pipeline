@@ -9,7 +9,7 @@ models:
             - custkey
             - valid_from
       - dbt_utils.equal_rowcount:
-          tags: 'model_freshness'
+          tags: 'freshness'
           compare_model: ref('customer_snapshot')
     columns:
       - name: custkey

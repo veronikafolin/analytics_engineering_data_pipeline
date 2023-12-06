@@ -1,5 +1,5 @@
 {{config (
-    cluster_by=['updated_at']
+    cluster_by=['valid_from']
 )}}
 
 with
@@ -25,7 +25,6 @@ final as (
         customer.cust_mktsegment,
         customer.cust_nation_name,
         customer.cust_region_name,
-        orders.updated_at,
         orders.valid_from,
         orders.valid_to
     from orders

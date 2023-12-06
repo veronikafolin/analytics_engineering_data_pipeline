@@ -7,7 +7,6 @@ select
     o_orderpriority as orderpriority,
     o_clerk as clerk,
     o_shippriority as shippriority,
-    DATE(dbt_updated_at) as updated_at,
     DATE(dbt_valid_from) as valid_from,
     DATE(dbt_valid_to) as valid_to
 

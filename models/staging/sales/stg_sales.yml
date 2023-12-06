@@ -140,11 +140,10 @@ models:
      - dbt_utils.unique_combination_of_columns:
          combination_of_columns:
            - orderkey
-           - updated_at
-     - dbt_utils.recency:
-         datepart: day
-         field: updated_at
-         interval: 10
+           - valid_from
+     - dbt_utils.equal_rowcount:
+         tags: 'freshness'
+         compare_model: ref('orders_snapshot')
     columns:
       - name: orderkey
         description: Primary key for an order.
@@ -199,14 +198,6 @@ models:
         description: Shipping priority.
         tests:
           - not_null
-      - name: updated_at
-        description: Last update of the data.
-        tests:
-          - not_null
-          - dbt_utils.accepted_range:
-              max_value: "getdate()"
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
       - name: valid_from
         description: Time when this snapshot row was first inserted.
         tests:
