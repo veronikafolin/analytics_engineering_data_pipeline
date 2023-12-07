@@ -39,5 +39,30 @@ models:
     ## To disable elementary for dev, uncomment this:
     # enabled: "{{ target.name in ['prod','analytics'] }}"
   dbt_core_reusable_demo:
+    +meta:
+      owner: "v.folin@reply.it"
     marts:
-        +materialized: table
+      +materialized: table
+      sales:
+        +tags: "SALES"
+      products:
+        +tags: "PRODUCTS"
+      individuals:
+        +tags: "INDIVIDUALS"
+      dataquality:
+        +tags: "DATA_QUALITY"
+    staging:
+      sales:
+        +tags: "SALES"
+      products:
+        +tags: "PRODUCTS"
+      individuals:
+        +tags: "INDIVIDUALS"
+      dataquality:
+        +tags: "DATA_QUALITY"
+
+
+tests:
+  dbt_core_reusable_demo:
+     +meta:
+       owner: "v.folin@reply.it"

@@ -1,0 +1,10 @@
+TEST_NAME,TEST_TAG
+accepted_values,validity
+accepted_range,validity
+not_null,completeness
+relationships,completeness
+unique,uniqueness
+equal_rowcount,consistency
+unique_combination_of_columns,uniqueness
+expect_column_values_to_be_of_type,validity
+expect_column_values_to_be_in_set,validity
