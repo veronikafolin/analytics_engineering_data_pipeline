@@ -14,6 +14,7 @@ test_tags as (
 
 final as (
     select
+        test_results.TEST_UNIQUE_ID,
         tests.TEST_SHORT_NAME,
         test_results.MODEL_UNIQUE_ID,
         test_results.DATABASE_NAME,
