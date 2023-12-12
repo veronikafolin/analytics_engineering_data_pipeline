@@ -1,0 +1,11 @@
+dags
+dbt_packages
+edr_target
+logs
+target
+dbt_project.yml
+packages.yml
+README.md
+.github
+.gcloudignore
+.gitignore
