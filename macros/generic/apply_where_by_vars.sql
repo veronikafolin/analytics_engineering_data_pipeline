@@ -2,8 +2,12 @@
 
 {% set filters = var("filters") %}
 
-    {% for filter in filters %}
-        where {{filter["field"]}} = '{{filter["value"]}}'
-    {% endfor %}
+    {% if filters|length > 0 %}
+        where
+        {% for filter in filters %}
+    --        where {{filter["field"]}} = '{{filter["value"]}}'
+            {{filter}}{% if not loop.last %} and {% endif %}
+        {% endfor %}
+    {% endif %}
 
 {% endmacro %}

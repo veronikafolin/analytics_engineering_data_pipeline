@@ -14,11 +14,11 @@ default_args = {
     'retry_delay': timedelta(minutes=1),
 }
 
-with DAG(dag_id='build_volume_orders', default_args=default_args, schedule_interval=None):
+with DAG(dag_id='volume_orders_1', default_args=default_args, schedule_interval=None):
 
     trigger_build_fct_orders = TriggerDagRunOperator(
         task_id="trigger_build_fct_orders",
-        trigger_dag_id="build_fct_orders",
+        trigger_dag_id="fct_orders_1",
         wait_for_completion=True
     )
 
