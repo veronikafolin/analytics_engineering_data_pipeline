@@ -6,4 +6,4 @@ README.md
 .gcloudignore
 .gitignore
 .git
-gha-creds-bbf42fd7121519b2.json
+*.json
