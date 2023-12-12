@@ -42,3 +42,4 @@ jobs:
         path: '../'
         destination: 'europe-west4-demo-dbt-snowf-15fd2dcb-bucket/data/dbt'
         process_gcloudignore: true
+        gzip: false
