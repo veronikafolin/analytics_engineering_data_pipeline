@@ -28,7 +28,7 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
-        service_account: '761676823975-compute@developer.gserviceaccount.com'
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
     - id: 'upload-folder'
       uses: 'google-github-actions/upload-cloud-storage@v1'
