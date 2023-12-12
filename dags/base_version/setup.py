@@ -9,7 +9,7 @@ from airflow_dbt.operators.dbt_operator import (
 default_args = {
     'start_date': airflow.utils.dates.days_ago(0),
     'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    'retry_delay': timedelta(minutes=1),
 }
 
 with DAG(dag_id='setup_dbt_project_1', default_args=default_args, schedule_interval=None):
