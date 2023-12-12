@@ -12,7 +12,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
-with DAG(dag_id='setup_dbt_project', default_args=default_args, schedule_interval=None):
+with DAG(dag_id='setup_dbt_project_1', default_args=default_args, schedule_interval=None):
 
     dbt_debug = BashOperator(
         task_id="dbt_debug",

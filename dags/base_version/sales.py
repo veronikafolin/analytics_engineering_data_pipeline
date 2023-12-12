@@ -17,10 +17,10 @@ from airflow_dbt.operators.dbt_operator import (
 default_args = {
     'start_date': dates.days_ago(0),
     'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    'retry_delay': timedelta(minutes=1),
 }
 
-with (DAG(dag_id='build_fct_orders', default_args=default_args, schedule_interval=None)):
+with (DAG(dag_id='fct_orders_1', default_args=default_args, schedule_interval=None)):
 
     dbt_snapshot_orders = DbtSnapshotOperator(
         task_id='dbt_snapshot_orders',
@@ -60,7 +60,7 @@ with (DAG(dag_id='build_fct_orders', default_args=default_args, schedule_interva
 
     trigger_customer_dag = TriggerDagRunOperator(
         task_id="trigger_customer_dag",
-        trigger_dag_id="build_dim_customer",
+        trigger_dag_id="dim_customer_1",
         wait_for_completion=True,
         trigger_rule=TriggerRule.ALL_DONE
     )
@@ -74,14 +74,14 @@ with (DAG(dag_id='build_fct_orders', default_args=default_args, schedule_interva
 
     customer_update_sensor = ExternalTaskSensor(
         task_id="customer_update_sensor",
-        external_dag_id="build_dim_customer",
+        external_dag_id="dim_customer_1",
         external_task_id="dbt_run_dim_customer",
         check_existence=True,
         timeout=60*10,  # it will fail after 10 minutes
         poke_interval=30,
         allowed_states=["success"],
         failed_states=["failed", "skipped"],
-        execution_date_fn=get_execution_date_of('build_dim_customer'),
+        execution_date_fn=get_execution_date_of('dim_customer_1'),
         trigger_rule=TriggerRule.ALL_DONE
     )
 

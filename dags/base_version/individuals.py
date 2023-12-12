@@ -19,7 +19,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
 }
 
-with DAG(dag_id='build_dim_customer', default_args=default_args, schedule_interval=None):
+with DAG(dag_id='dim_customer_1', default_args=default_args, schedule_interval=None):
 
     dbt_snapshot_customer = DbtSnapshotOperator(
         task_id='dbt_snapshot_customer',
@@ -58,7 +58,7 @@ with DAG(dag_id='build_dim_customer', default_args=default_args, schedule_interv
 
     trigger_nation_dag = TriggerDagRunOperator(
         task_id="trigger_nation_dag",
-        trigger_dag_id="build_int_nation",
+        trigger_dag_id="int_nation_1",
         trigger_rule=TriggerRule.ALL_DONE,
         wait_for_completion=True
     )
@@ -78,7 +78,7 @@ with DAG(dag_id='build_dim_customer', default_args=default_args, schedule_interv
     trigger_nation_dag >> dbt_run_dim_customer >> dbt_test_dim_customer
 
 
-with DAG(dag_id='build_int_nation', default_args=default_args, schedule_interval=None):
+with DAG(dag_id='int_nation_1', default_args=default_args, schedule_interval=None):
 
     dbt_run_stg_nation = DbtRunOperator(
         task_id='dbt_run_stg_nation',
