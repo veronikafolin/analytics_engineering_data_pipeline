@@ -1,6 +1,4 @@
 dags
-dbt_project.yml
-packages.yml
 README.md
 .github
 .gcloudignore
