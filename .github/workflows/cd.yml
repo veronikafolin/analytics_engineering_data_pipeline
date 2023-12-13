@@ -15,7 +15,6 @@ jobs:
 
       - name: Copy files from target to docs directory
         run: |
-          mkdir docs 
           cp -r target/. docs/
 
       - name: Delete target directory
