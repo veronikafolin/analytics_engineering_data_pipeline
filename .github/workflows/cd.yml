@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'target/'
 
 jobs:
   copy_docs_files:
@@ -15,6 +17,8 @@ jobs:
 
       - name: Copy files from target to docs directory
         run: |
+          if [ ! -d docs ]; then
+            mkdir docs
           cp -r target/. docs/
 
       - name: Delete target directory
