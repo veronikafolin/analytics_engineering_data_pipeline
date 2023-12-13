@@ -7,7 +7,6 @@ fct_orders_2:
   schedule_interval: None
   dagrun_timeout_sec: 3600
   description: "To materialize orders' fact table"
-#  python_callable_file: /home/airflow/gcs/dags/dag_factory_version/sales_factory/sales.py
   tasks:
     dbt_snapshot_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
@@ -15,24 +14,19 @@ fct_orders_2:
     check_orders_freshness:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       select: 'stg_orders, tag:freshness'
-      dependencies: dbt_snapshot_orders
+      dependencies: [dbt_snapshot_orders]
     branch_on_orders_freshness:
       operator: airflow.operators.python.BranchPythonOperator
-      python_callable: !home.airflow.gcs.dags.dag_factory_version.sales_factory.sales.branch_func_on_orders_freshness
+      python_callable_name: branch_func_on_orders_freshness
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/sales_factory/utils.py
       provide_context: True
-      dependencies: check_orders_freshness
-#    trigger_customer_dag:
-#      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-#      trigger_dag_id: 'dim_customer_2'
-#      wait_for_completion: True
-#      dependencies: check_orders_freshness
-#    dbt_run_stg_orders:
-#      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-#      models: 'stg_orders'
-#      dependencies: check_orders_freshness
-#    dbt_test_stg_orders:
-#      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-#      models: 'stg_orders'
-#      trigger_rule: airflow.utils.trigger_rule.ALL_DONE
-#      dependencies: dbt_run_stg_orders
-
+      dependencies: [check_orders_freshness]
+    trigger_customer_dag:
+      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+      trigger_dag_id: 'dim_customer_1'
+      wait_for_completion: True
+      dependencies: [branch_on_orders_freshness]
+    dbt_run_stg_orders:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'stg_orders'
+      dependencies: [branch_on_orders_freshness]

@@ -1,7 +1,7 @@
 from datetime import timedelta
+
 import airflow
 from airflow import DAG
-from airflow.operators.bash import BashOperator
 from airflow_dbt.operators.dbt_operator import (
     DbtDocsGenerateOperator
 )

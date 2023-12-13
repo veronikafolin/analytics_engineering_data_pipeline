@@ -23,4 +23,4 @@ with DAG(dag_id='setup_dbt_project_1', default_args=default_args, schedule_inter
         task_id='dbt_deps',
     )
 
-    dbt_deps >> dbt_debug
+    dbt_debug >> dbt_deps
