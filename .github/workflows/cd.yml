@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'target/'
+      - 'target/**'
 
 jobs:
   copy_docs_files:
