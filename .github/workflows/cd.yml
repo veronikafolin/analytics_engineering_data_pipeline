@@ -1,0 +1,31 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  copy_docs_files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Copy files from target to docs directory
+        run: |
+          mkdir docs 
+          cp -r target/. docs/
+
+      - name: Delete target directory
+        run: |
+          rm -rf target
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "verofolin@gmail.com"
+          git config --global user.name "Veronika Folin"
+          git add .
+          git commit -m "Copy files to docs directory"
+          git push
