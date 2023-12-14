@@ -75,7 +75,7 @@ with (DAG(dag_id='fct_orders_1', default_args=default_args, schedule_interval=No
     customer_update_sensor = ExternalTaskSensor(
         task_id="customer_update_sensor",
         external_dag_id="dim_customer_1",
-        external_task_id="dbt_run_dim_customer",
+        external_task_id="dbt_test_dim_customer",
         check_existence=True,
         timeout=60*10,  # it will fail after 10 minutes
         poke_interval=30,
