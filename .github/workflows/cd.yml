@@ -22,9 +22,9 @@ jobs:
           fi
           cp -r target/. docs/
 
-      - name: Delete target directory
-        run: |
-          rm -rf target
+#      - name: Delete target directory
+#        run: |
+#          rm -rf target
 
       - name: Commit and push changes
         run: |
