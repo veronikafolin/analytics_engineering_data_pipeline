@@ -1,0 +1,77 @@
+dim_customer_2:
+  default_args:
+    owner: 'v.folin@reply.it'
+    start_date: 2023-12-08
+    retries: 1
+    retry_delay_sec: 60
+  schedule_interval: None
+  dagrun_timeout_sec: 3600
+  description: "To materialize customers' dimension table"
+  tasks:
+    dbt_snapshot_customer:
+      operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
+      models: 'customer_snapshot'
+    check_customer_freshness:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      select: 'stg_customer, tag:freshness'
+      dependencies: [ dbt_snapshot_customer ]
+    branch_on_customer_freshness:
+      operator: airflow.operators.python.BranchPythonOperator
+      python_callable_name: branch_func_on_customer_freshness
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/individuals_factory/utils.py
+      provide_context: True
+      dependencies: [ check_customer_freshness ]
+    trigger_nation_dag:
+      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+      trigger_dag_id: 'int_nation_2'
+      wait_for_completion: True
+      trigger_rule: 'all_done'
+      dependencies: [ branch_on_customer_freshness, dbt_test_stg_customer ]
+    dbt_run_stg_customer:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'stg_customer'
+      dependencies: [ branch_on_customer_freshness ]
+    dbt_test_stg_customer:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      models: 'stg_customer'
+      dependencies: [ dbt_run_stg_customer ]
+    dbt_run_dim_customer:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'dim_customer'
+      dependencies: [ trigger_nation_dag ]
+    dbt_test_dim_customer:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      models: 'dim_customer'
+      dependencies: [ dbt_run_dim_customer ]
+int_nation_2:
+  default_args:
+    owner: 'v.folin@reply.it'
+    start_date: 2023-12-08
+    retries: 1
+    retry_delay_sec: 60
+  schedule_interval: None
+  dagrun_timeout_sec: 3600
+  description: "To materialize nations' intermediate table"
+  tasks:
+    dbt_run_stg_nation:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'stg_nation'
+    dbt_test_stg_nation:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      models: 'stg_nation'
+      dependencies: [ dbt_run_stg_nation ]
+    dbt_run_stg_region:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'stg_region'
+    dbt_test_stg_region:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      models: 'stg_region'
+      dependencies: [ dbt_run_stg_region ]
+    dbt_run_int_nation:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'int_nation'
+      dependencies: [ dbt_test_stg_nation, dbt_test_stg_region ]
+    dbt_test_int_nation:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      models: 'int_nation'
+      dependencies: [ dbt_run_int_nation ]
