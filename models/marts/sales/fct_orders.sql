@@ -1,11 +1,8 @@
-{{config (
-    cluster_by=['valid_from']
-)}}
-
 with
 
 orders as (
     select * from {{ref('stg_orders')}}
+    where valid_to is null
 ),
 
 customer as (
@@ -24,9 +21,7 @@ final as (
         customer.custkey,
         customer.cust_mktsegment,
         customer.cust_nation_name,
-        customer.cust_region_name,
-        orders.valid_from,
-        orders.valid_to
+        customer.cust_region_name
     from orders
     join customer using(custkey)
 )

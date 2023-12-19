@@ -2,7 +2,6 @@ with
 
 orders as (
     select * from {{ref('fct_orders')}}
-    where valid_to is null
 ),
 
 final as (
