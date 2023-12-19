@@ -24,7 +24,7 @@ with DAG(dag_id='dim_customer_1', default_args=default_args, schedule_interval=N
 
     dbt_snapshot_customer = DbtSnapshotOperator(
         task_id='dbt_snapshot_customer',
-        models='customer_snapshot'
+        models='snapshot_customer'
     )
 
     check_customer_freshness = DbtTestOperator(

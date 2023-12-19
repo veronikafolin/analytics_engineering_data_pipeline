@@ -25,7 +25,7 @@ with (DAG(dag_id='fct_orders_1', default_args=default_args, schedule_interval=No
 
     dbt_snapshot_orders = DbtSnapshotOperator(
         task_id='dbt_snapshot_orders',
-        models='orders_snapshot'
+        models='snapshot_orders'
     )
 
     check_orders_freshness = DbtTestOperator(
