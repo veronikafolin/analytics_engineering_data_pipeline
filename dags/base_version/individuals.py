@@ -1,6 +1,5 @@
 from datetime import timedelta
 from airflow import DAG
-from airflow.models import TaskInstance
 from airflow.models.baseoperator import chain
 from airflow.operators.python import BranchPythonOperator
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
@@ -12,6 +11,8 @@ from airflow_dbt.operators.dbt_operator import (
     DbtRunOperator,
     DbtTestOperator,
 )
+
+import common_utils
 
 default_args = {
     'start_date': dates.days_ago(0),
@@ -33,8 +34,7 @@ with DAG(dag_id='dim_customer_1', default_args=default_args, schedule_interval=N
 
 
     def branch_func_on_customer_freshness(**kwargs):
-        execution_date = kwargs['execution_date']
-        task_status = TaskInstance(check_customer_freshness, execution_date).current_state()
+        task_status = common_utils.get_internal_task_state('check_customer_freshness', **kwargs)
         if task_status == State.SUCCESS:
             return 'trigger_nation_dag'
         else:

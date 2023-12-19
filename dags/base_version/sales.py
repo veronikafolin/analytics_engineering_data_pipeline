@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from airflow import DAG
-from airflow.models import TaskInstance, DagRun
 from airflow.operators.python import BranchPythonOperator
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.sensors.external_task import ExternalTaskSensor
@@ -13,6 +12,8 @@ from airflow_dbt.operators.dbt_operator import (
     DbtRunOperator,
     DbtTestOperator,
 )
+
+import common_utils
 
 default_args = {
     'start_date': dates.days_ago(0),
@@ -32,10 +33,8 @@ with (DAG(dag_id='fct_orders_1', default_args=default_args, schedule_interval=No
         select='stg_orders, tag:freshness'
     )
 
-
     def branch_func_on_orders_freshness(**kwargs):
-        execution_date = kwargs['execution_date']
-        task_status = TaskInstance(check_orders_freshness, execution_date).current_state()
+        task_status = common_utils.get_internal_task_state('check_orders_freshness', **kwargs)
         if task_status == State.SUCCESS:
             return 'trigger_customer_dag'
         else:
@@ -65,13 +64,6 @@ with (DAG(dag_id='fct_orders_1', default_args=default_args, schedule_interval=No
         trigger_rule=TriggerRule.ALL_DONE
     )
 
-    def get_execution_date_of(dag_id):
-        def get_last_execution_date(exec_date, **kwargs):
-            dag_runs = DagRun.find(dag_id=dag_id)
-            dag_runs.sort(key=lambda x: x.execution_date, reverse=True)
-            return dag_runs[0].execution_date if dag_runs else None
-        return get_last_execution_date
-
     customer_update_sensor = ExternalTaskSensor(
         task_id="customer_update_sensor",
         external_dag_id="dim_customer_1",
@@ -81,7 +73,7 @@ with (DAG(dag_id='fct_orders_1', default_args=default_args, schedule_interval=No
         poke_interval=30,
         allowed_states=["success"],
         failed_states=["failed", "skipped"],
-        execution_date_fn=get_execution_date_of('dim_customer_1'),
+        execution_date_fn=common_utils.get_execution_date_of('dim_customer_1'),
         trigger_rule=TriggerRule.ALL_DONE
     )
 

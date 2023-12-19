@@ -1,5 +1,5 @@
 from airflow.utils.state import State
-from dag_factory_version import common_utils
+import common_utils
 
 
 def branch_func_on_orders_freshness(**kwargs):
