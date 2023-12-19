@@ -18,7 +18,7 @@ dim_customer_2:
     branch_on_customer_freshness:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_name: branch_func_on_customer_freshness
-      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/individuals_factory/utils.py
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/flat_version/individuals_factory/utils.py
       provide_context: True
       dependencies: [ check_customer_freshness ]
     trigger_nation_dag:
