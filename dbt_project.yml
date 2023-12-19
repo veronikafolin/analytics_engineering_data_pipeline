@@ -22,6 +22,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 vars:
   groupBy: []
   filters: []
+  partitionByDate: CURRENT_DATE()
   startPeriod: '1994-01-01'
   endPeriod: '1994-12-31'
 
