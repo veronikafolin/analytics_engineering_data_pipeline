@@ -7,7 +7,7 @@ with
 
 orders as (
     select *
-    from {{ref('registry_orders')}}
+    from {{ref('registry_stg_orders')}}
     {{ apply_partition_date() }}
 ),
 
