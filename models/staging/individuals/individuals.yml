@@ -10,7 +10,7 @@ models:
             - valid_from
       - dbt_utils.equal_rowcount:
           tags: 'freshness'
-          compare_model: ref('customer_snapshot')
+          compare_model: ref('snapshot_customer')
     columns:
       - name: custkey
         description: Primary key for a customer.

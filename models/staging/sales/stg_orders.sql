@@ -10,4 +10,4 @@ select
     DATE(dbt_valid_from) as valid_from,
     DATE(dbt_valid_to) as valid_to
 
-from {{ref('orders_snapshot')}}
+from {{ref('snapshot_orders')}}

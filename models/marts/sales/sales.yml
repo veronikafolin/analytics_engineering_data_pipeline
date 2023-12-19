@@ -14,3 +14,5 @@ models:
         tests:
           - dbt_utils.accepted_range:
               min_value: 0
+  - name: registry_fct_orders
+    description: Historicized table for customer orders' information.

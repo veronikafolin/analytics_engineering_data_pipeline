@@ -143,7 +143,7 @@ models:
            - valid_from
      - dbt_utils.equal_rowcount:
          tags: 'freshness'
-         compare_model: ref('orders_snapshot')
+         compare_model: ref('snapshot_orders')
     columns:
       - name: orderkey
         description: Primary key for an order.
@@ -208,3 +208,72 @@ models:
               column_type: date
       - name: valid_to
         description: Time when this row became invalidated.
+  - name: registry_stg_orders
+    description: Snapshot registry of customers' orders data.
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+       combination_of_columns:
+         - orderkey
+         - partition_date
+    columns:
+      - name: orderkey
+        description: Primary key for an order.
+        tests:
+         - not_null
+      - name: custkey
+        description: Foreign key to stg_customer.custkey.
+        tests:
+         - not_null
+         - relationships:
+             to: ref('stg_customer')
+             field: custkey
+      - name: orderstatus
+        description: '{{ doc("orderstatus") }}'
+        tests:
+         - not_null
+         - accepted_values:
+             values:
+               - F
+               - O
+               - P
+      - name: totalprice
+        description: Total price of the order.
+        tests:
+         - not_null
+         - dbt_utils.accepted_range:
+             min_value: 0
+      - name: orderdate
+        description: Date of the order.
+        tests:
+         - not_null
+         - dbt_utils.accepted_range:
+             max_value: "getdate()"
+         - dbt_expectations.expect_column_values_to_be_of_type:
+             column_type: date
+      - name: orderpriority
+        description: Priority of the order.
+        tests:
+         - not_null
+         - accepted_values:
+             values:
+               - 1-URGENT
+               - 2-HIGH
+               - 3-MEDIUM
+               - 4-NOT SPECIFIED
+               - 5-LOW
+      - name: clerk
+        description: Identification of the employee who processed the order.
+        tests:
+         - not_null
+      - name: shippriority
+        description: Shipping priority.
+        tests:
+         - not_null
+      - name: partition_date
+        description: Time when this snapshot row was inserted.
+        tests:
+         - not_null
+         - dbt_utils.accepted_range:
+             max_value: "getdate()"
+         - dbt_expectations.expect_column_values_to_be_of_type:
+             column_type: date
