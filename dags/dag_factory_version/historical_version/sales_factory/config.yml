@@ -15,6 +15,7 @@ registry_fct_orders:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
       trigger_dag_id: 'registry_dim_customer'
       wait_for_completion: True
+      deferrable: True
     dbt_run_registry_stg_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_stg_orders'
