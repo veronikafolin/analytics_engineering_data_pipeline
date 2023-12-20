@@ -10,3 +10,5 @@ models:
     tests:
      - dbt_utils.equal_rowcount:
          compare_model: ref('stg_nation')
+  - name: registry_dim_customer
+    description: Historicized table for customers' information.

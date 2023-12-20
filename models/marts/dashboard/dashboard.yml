@@ -11,3 +11,5 @@ models:
     description: Customers who start to do business with you over a specific time period.
   - name: lost_customer
     description: Customers who stop doing business with you over a specific time period.
+  - name: registry_volume_orders
+    description: Historicized dashboard about orders' volume.
