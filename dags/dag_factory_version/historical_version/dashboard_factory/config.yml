@@ -18,6 +18,7 @@ registry_volume_orders:
       trigger_dag_id: 'registry_fct_orders'
       wait_for_completion: True
       deferrable: True
+      failed_states: ['failed']
     dbt_run_dashboard:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_volume_orders'
