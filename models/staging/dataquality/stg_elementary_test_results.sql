@@ -9,6 +9,6 @@ select
 	STATUS,
 	FAILURES,
 	RESULT_ROWS,
-	FAILED_ROW_COUNT
+	COALESCE(FAILED_ROW_COUNT, 0) as FAILED_ROW_COUNT
 
 from {{ source('elementary', 'elementary_test_results') }}
