@@ -10,7 +10,7 @@ fct_orders_2:
   tasks:
     dbt_snapshot_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
-      models: 'orders_snapshot'
+      models: 'snapshot_orders'
     check_orders_freshness:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       select: 'stg_orders, tag:freshness'

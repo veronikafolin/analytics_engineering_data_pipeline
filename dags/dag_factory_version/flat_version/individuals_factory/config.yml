@@ -10,7 +10,7 @@ dim_customer_2:
   tasks:
     dbt_snapshot_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
-      models: 'customer_snapshot'
+      models: 'snapshot_customer'
     check_customer_freshness:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       select: 'stg_customer, tag:freshness'
