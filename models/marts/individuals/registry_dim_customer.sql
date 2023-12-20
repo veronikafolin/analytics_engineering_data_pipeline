@@ -33,6 +33,6 @@ select * from final
 
 {% if is_incremental() %}
 
-  partition_date > (select max(partition_date) from {{ this }})
+  where partition_date > (select max(partition_date) from {{ this }})
 
 {% endif %}
