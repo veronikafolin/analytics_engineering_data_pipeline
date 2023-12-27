@@ -1,7 +1,8 @@
 {{
     config(
         cluster_by=['partition_date'],
-        materialized='incremental'
+        materialized='incremental',
+        on_schema_change='append_new_columns'
     )
 }}
 
@@ -37,6 +38,7 @@ select * from final
 
 {% if is_incremental() %}
 
-  where partition_date > (select max(partition_date) from {{ this }})
+--  where partition_date > (select max(partition_date) from {{ this }})
+    where partition_date = CURRENT_DATE()
 
 {% endif %}
