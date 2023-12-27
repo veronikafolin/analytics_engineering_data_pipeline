@@ -15,14 +15,20 @@ registry_dim_customer:
     check_int_nation_existence:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: check_int_nation_existence.sql
+    branch_on_int_nation_existence:
+      operator: airflow.operators.python.BranchPythonOperator
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical_version/individuals_factory/utils.py
+      python_callable_name: branch_func_on_on_int_nation_existence
+      provide_context: True
+      trigger_rule: 'all_done'
+      dependencies: [ check_int_nation_existence ]
     trigger_nation_dag:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
       trigger_dag_id: 'int_nation'
       wait_for_completion: True
       deferrable: True
       failed_states: ['failed']
-      trigger_rule: 'all_success'
-      dependencies: [ check_int_nation_existence ]
+      dependencies: [ branch_on_int_nation_existence ]
     dbt_run_registry_stg_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_stg_customer'
@@ -34,7 +40,8 @@ registry_dim_customer:
     dbt_run_registry_dim_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_dim_customer'
-      dependencies: [ trigger_nation_dag, dbt_test_registry_stg_customer ]
+      trigger_rule: 'none_failed'
+      dependencies: [ branch_on_int_nation_existence, trigger_nation_dag, dbt_test_registry_stg_customer ]
     dbt_test_registry_dim_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_dim_customer'
