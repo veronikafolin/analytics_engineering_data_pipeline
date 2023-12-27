@@ -29,6 +29,9 @@ registry_dim_customer:
       deferrable: True
       failed_states: ['failed']
       dependencies: [ branch_on_int_nation_existence ]
+    check_if_registry_stg_customer_is_initialized:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: {{check_if_table_is_initialized('registry_stg_customer')}}
     dbt_run_registry_stg_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_stg_customer'
