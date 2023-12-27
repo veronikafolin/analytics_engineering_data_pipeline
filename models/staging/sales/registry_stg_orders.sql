@@ -38,7 +38,6 @@ select * from final
 
 {% if is_incremental() %}
 
---  where partition_date > (select max(partition_date) from {{ this }})
-    where partition_date = CURRENT_DATE()
+  where partition_date > (select max(partition_date) from {{ this }})
 
 {% endif %}
