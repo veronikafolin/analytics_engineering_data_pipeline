@@ -1,4 +1,0 @@
-SELECT ROW_COUNT
-FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
-WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
-AND    table_name   = {{ params.table_name }}
