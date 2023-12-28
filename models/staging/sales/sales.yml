@@ -277,3 +277,144 @@ models:
              max_value: "getdate()"
          - dbt_expectations.expect_column_values_to_be_of_type:
              column_type: date
+  - name: registry_stg_lineitem
+    description: Snapshot registry of orders' line items.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - orderkey
+            - linenumber
+            - partition_date
+    columns:
+      - name: orderkey
+        description: Foreign key to stg_orders.orderkey and first part of the composite primary key for an order line item.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: orderkey
+      - name: linenumber
+        description: Unique identifier of a line in an order and second part of the composite primary key for an order line item.
+        tests:
+          - not_null
+      - name: lineitemkey
+        description: Surrogate key for a for a lineitem.
+        tests:
+          - not_null
+      - name: partkey
+        description: Foreign key to stg_part.partkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_part')
+              field: partkey
+      - name: suppkey
+        description: Foreign key to stg_supplier.suppkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_supplier')
+              field: suppkey
+      - name: partsuppkey
+        description: Surrogate key for the composite foreign key (PARTKEY, SUPPKEY).
+        tests:
+          - relationships:
+              to: ref('stg_partsupp')
+              field: partsuppkey
+      - name: quantity
+        description: Quantity purchased in the order for a certain product.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: extendedprice
+        description: Revenue for a line item that not consider the discount application.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: discount
+        description: Percentage discount on the product.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+      - name: tax
+        description: Percentage of taxes on the product.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: returnflag
+        description: '{{ doc("returnflag") }}'
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - R
+                - A
+                - N
+      - name: linestatus
+        description: '{{ doc("linestatus") }}'
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - F
+                - O
+      - name: shipdate
+        description: Ship date of the item.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "receiptdate"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+      - name: commitdate
+        description: Commit date of the item.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+      - name: receiptdate
+        description: Receipt date of the item.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+      - name: shipinstruct
+        description: Shipping instructions for the item.
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - DELIVER IN PERSON
+                - COLLECT COD
+                - NONE
+                - TAKE BACK RETURN
+      - name: shipmode
+        description: Shipping mode for the item.
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - REG AIR
+                - AIR
+                - RAIL
+                - SHIP
+                - TRUCK
+                - MAIL
+                - FOB
+      - name: partition_date
+        description: Time when this snapshot row was inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
