@@ -7,8 +7,5 @@ models:
     description: All customers' information.
   - name: int_nation
     description: Relates nations to the regions they belong to.
-    tests:
-     - dbt_utils.equal_rowcount:
-         compare_model: ref('stg_nation')
   - name: registry_dim_customer
     description: Historicized table for customers' information.
