@@ -13,7 +13,7 @@ delivery_time as (
 ),
 
 final as (
-    select avg(delivery_days)
+    select avg(delivery_days) as avg_delivery_days
     from delivery_time
 )
 
