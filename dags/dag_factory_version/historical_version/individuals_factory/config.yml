@@ -14,7 +14,11 @@ registry_dim_customer:
       models: 'snapshot_customer'
     check_int_nation_existence:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
-      sql: check_int_nation_existence.sql
+      sql: |
+        SELECT EXISTS (
+            SELECT * FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
+            WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+            AND    table_name   = 'INT_NATION' );
       retries: 0
     branch_on_int_nation_existence:
       operator: airflow.operators.python.BranchPythonOperator
@@ -33,7 +37,11 @@ registry_dim_customer:
       dependencies: [ branch_on_int_nation_existence ]
     check_registry_stg_customer_initialization:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
-      sql: check_registry_stg_customer_initialization.sql
+      sql: |
+        SELECT ROW_COUNT
+        FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
+        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        AND    table_name   = 'REGISTRY_STG_CUSTOMER'
       retries: 0
     branch_on_registry_stg_customer_initialization:
       operator: airflow.operators.python.BranchPythonOperator
