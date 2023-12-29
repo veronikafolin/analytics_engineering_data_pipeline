@@ -22,7 +22,7 @@ registry_dim_customer:
       retries: 0
     branch_on_int_nation_existence:
       operator: airflow.operators.python.BranchPythonOperator
-      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical_version/individuals_factory/utils.py
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
       python_callable_name: branch_func_on_on_int_nation_existence
       provide_context: True
       trigger_rule: 'all_done'
@@ -45,7 +45,7 @@ registry_dim_customer:
       retries: 0
     branch_on_registry_stg_customer_initialization:
       operator: airflow.operators.python.BranchPythonOperator
-      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical_version/individuals_factory/utils.py
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
       python_callable_name: branch_func_on_on_registry_stg_customer_initialization
       provide_context: True
       trigger_rule: 'all_done'

@@ -17,7 +17,7 @@ fct_orders_2:
       dependencies: [dbt_snapshot_orders]
     branch_on_orders_freshness:
       operator: airflow.operators.python.BranchPythonOperator
-      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/flat_version/sales_factory/utils.py
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/current/sales_factory/utils.py
       python_callable_name: branch_func_on_orders_freshness
       provide_context: True
       dependencies: [check_orders_freshness]
@@ -39,7 +39,7 @@ fct_orders_2:
     branch_on_dbt_test_dim_customer_state:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_name: branch_func_on_dbt_test_dim_customer_state
-      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/flat_version/sales_factory/utils.py
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/current/sales_factory/utils.py
       provide_context: True
       dependencies: [ trigger_customer_dag ]
     dbt_run_fct_orders:
