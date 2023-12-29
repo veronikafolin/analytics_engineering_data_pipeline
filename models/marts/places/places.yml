@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: int_nation
+    description: Relates nations to the regions they belong to.

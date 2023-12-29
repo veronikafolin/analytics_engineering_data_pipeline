@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: registry_fct_orders
+    description: Historicized table for customer orders' information.
+    columns:
+      - name: partition_date
+        description: Time when this snapshot row was inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+  - name: registry_fct_sales
+    description: Historicized table for sales' information.
+    columns:
+      - name: discounted_extended_price
+        tests:
+         - dbt_utils.accepted_range:
+             min_value: 0
+      - name: discounted_extended_price_plus_tax
+        tests:
+         - dbt_utils.accepted_range:
+             min_value: 0
+      - name: partition_date
+        description: Time when this snapshot row was inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date

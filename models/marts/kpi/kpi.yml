@@ -1,8 +1,6 @@
 version: 2
 
 models:
-  - name: kpi_customer_negative_acctbal
-    description: Customers who have a negative account balance.
   - name: kpi_revenue
     description: Total sales generated from customer orders.
   - name: kpi_average_order_value

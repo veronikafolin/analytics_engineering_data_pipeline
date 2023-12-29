@@ -46,6 +46,8 @@ models:
         +tags: "PRODUCTS"
       individuals:
         +tags: "INDIVIDUALS"
+      places:
+        +tags: "PLACES"
       dataquality:
         +tags: "DATA_QUALITY"
     staging:
@@ -55,6 +57,8 @@ models:
         +tags: "PRODUCTS"
       individuals:
         +tags: "INDIVIDUALS"
+      places:
+        +tags: "PLACES"
       dataquality:
         +tags: "DATA_QUALITY"
 

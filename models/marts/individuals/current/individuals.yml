@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: dim_supplier
+    description: All suppliers' information.
+  - name: dim_customer
+    description: All customers' information.
