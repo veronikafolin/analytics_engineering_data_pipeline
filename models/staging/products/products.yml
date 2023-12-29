@@ -87,3 +87,109 @@ models:
           - not_null
           - dbt_utils.accepted_range:
               min_value: 0
+  - name: registry_stg_part
+    description: Snapshot registry of registered products.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - partkey
+            - partition_date
+    columns:
+      - name: partkey
+        description: Primary key for a product.
+        tests:
+          - not_null
+      - name: name
+        description: Name of the product.
+        tests:
+          - not_null
+      - name: manufacturer
+        description: Identifier of the product manufacturer.
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - Manufacturer#1
+                - Manufacturer#2
+                - Manufacturer#3
+                - Manufacturer#4
+                - Manufacturer#5
+      - name: brand
+        description: Identifier of the product brand.
+        tests:
+          - not_null
+      - name: type
+        description: Type of the product.
+        tests:
+          - not_null
+      - name: productsize
+        description: Size of the product.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: container
+        description: Type of container for the product.
+        tests:
+          - not_null
+      - name: retailprice
+        description: Retail price of the product.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: partition_date
+        description: Time when this snapshot row was inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+  - name: registry_stg_partsupp
+    description: Snapshot registry of products sold by a supplier.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - partkey
+            - suppkey
+            - partition_date
+    columns:
+      - name: partkey
+        description: Foreign key to registry_stg_part.partkey and first part of the composite primary key for a product sold by a supplier.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('registry_stg_part')
+              field: partkey
+      - name: suppkey
+        description: Foreign key to registry_stg_supplier.suppkey and second part of the composite primary key for a product sold by a supplier.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('registry_stg_supplier')
+              field: suppkey
+      - name: partsuppkey
+        description: Surrogate key for a for a product sold by a supplier.
+        tests:
+          - not_null
+      - name: availqty
+        description: Product availability for the supplier.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: supplycost
+        description: Price of the product from a certain supplier.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: partition_date
+        description: Time when this snapshot row was inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date

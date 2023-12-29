@@ -113,7 +113,6 @@ models:
       - name: custkey
         description: Primary key for a customer.
         tests:
-          - unique
           - not_null
       - name: cust_name
         description: Name of the customer.
@@ -132,6 +131,41 @@ models:
           - not_null
       - name: cust_mktsegment
         description: Customer market segment.
+        tests:
+          - not_null
+      - name: partition_date
+        description: Time when this snapshot row was inserted.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              max_value: "getdate()"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+  - name: registry_stg_supplier
+    description: Snapshot registry of suppliers.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - suppkey
+            - partition_date
+    columns:
+      - name: suppkey
+        description: Primary key of a supplier.
+        tests:
+          - not_null
+      - name: supp_name
+        description: Name of the supplier.
+        tests:
+          - not_null
+      - name: nationkey
+        description: Foreign key to stg_nation.nationkey.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_nation')
+              field: nationkey
+      - name: supp_acctbal
+        description: Supplier account balance.
         tests:
           - not_null
       - name: partition_date
