@@ -221,11 +221,11 @@ models:
         tests:
          - not_null
       - name: custkey
-        description: Foreign key to stg_customer.custkey.
+        description: Foreign key to registry_stg_customer.custkey.
         tests:
          - not_null
          - relationships:
-             to: ref('stg_customer')
+             to: ref('registry_stg_customer')
              field: custkey
       - name: orderstatus
         description: '{{ doc("orderstatus") }}'
@@ -287,11 +287,11 @@ models:
             - partition_date
     columns:
       - name: orderkey
-        description: Foreign key to stg_orders.orderkey and first part of the composite primary key for an order line item.
+        description: Foreign key to registry_stg_orders.orderkey and first part of the composite primary key for an order line item.
         tests:
           - not_null
           - relationships:
-              to: ref('stg_orders')
+              to: ref('registry_stg_orders')
               field: orderkey
       - name: linenumber
         description: Unique identifier of a line in an order and second part of the composite primary key for an order line item.
@@ -302,24 +302,24 @@ models:
         tests:
           - not_null
       - name: partkey
-        description: Foreign key to stg_part.partkey.
+        description: Foreign key to registry_stg_part.partkey.
         tests:
           - not_null
           - relationships:
-              to: ref('stg_part')
+              to: ref('registry_stg_part')
               field: partkey
       - name: suppkey
-        description: Foreign key to stg_supplier.suppkey.
+        description: Foreign key to registry_stg_supplier.suppkey.
         tests:
           - not_null
           - relationships:
-              to: ref('stg_supplier')
+              to: ref('registry_stg_supplier')
               field: suppkey
       - name: partsuppkey
         description: Surrogate key for the composite foreign key (PARTKEY, SUPPKEY).
         tests:
           - relationships:
-              to: ref('stg_partsupp')
+              to: ref('registry_stg_partsupp')
               field: partsuppkey
       - name: quantity
         description: Quantity purchased in the order for a certain product.
