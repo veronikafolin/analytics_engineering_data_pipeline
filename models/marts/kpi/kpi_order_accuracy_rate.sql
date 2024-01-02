@@ -1,12 +1,20 @@
 with
 
 orders as (
-    select * from {{ref('fct_orders')}}
+    select * from {{ref('registry_fct_orders')}}
+    {{ apply_partition_date() }}
+),
+
+filtered_orders as (
+    select *
+    from orders
+    {{ write_where_by_vars() }}
+    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 fulfilled_orders as (
     select orderkey
-    from orders
+    from filtered_orders
     where orderstatus = 'F'
 ),
 

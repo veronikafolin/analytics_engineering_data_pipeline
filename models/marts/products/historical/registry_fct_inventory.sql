@@ -9,13 +9,13 @@ with
 part as (
     select *
     from {{ref('registry_dim_part')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_part')}}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_part')}})
 ),
 
 partsupp as (
     select *
     from {{ref('registry_stg_partsupp')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_partsupp')}}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_partsupp')}})
 ),
 
 final as (

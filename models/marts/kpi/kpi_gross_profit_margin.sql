@@ -1,11 +1,27 @@
 with
 
 sales as (
-    select * from {{ref('fct_sales')}}
+    select * from {{ref('registry_fct_sales')}}
+    {{ apply_partition_date() }}
+),
+
+filtered_sales as (
+    select *
+    from sales
+    {{ write_where_by_vars() }}
+    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 inventory as (
-    select * from {{ref('fct_inventory')}}
+    select * from {{ref('registry_fct_inventory')}}
+    {{ apply_partition_date() }}
+),
+
+filtered_inventory as (
+    select *
+    from inventory
+    {{ write_where_by_vars() }}
+    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 profit as (
@@ -13,8 +29,8 @@ profit as (
         sales.discounted_extended_price as revenue,
         (inventory.supplycost * sales.quantity) as cost_of_good_sold,
         (revenue - cost_of_good_sold) as profit
-    from sales
-    join inventory using(partsuppkey)
+    from filtered_sales
+    join filtered_inventory using(partsuppkey)
 ),
 
 final as (

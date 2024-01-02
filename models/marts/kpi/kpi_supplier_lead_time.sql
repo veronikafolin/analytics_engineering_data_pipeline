@@ -1,7 +1,15 @@
 with
 
 sales as (
-    select * from {{ref('fct_sales')}}
+    select * from {{ref('registry_fct_sales')}}
+    {{ apply_partition_date() }}
+),
+
+filtered_sales as (
+    select *
+    from sales
+    {{ write_where_by_vars() }}
+    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 delivery_time as (
@@ -9,7 +17,7 @@ delivery_time as (
         shipdate,
         receiptdate,
         datediff(day, shipdate, receiptdate) as delivery_days
-    from sales
+    from filtered_sales
 ),
 
 final as (

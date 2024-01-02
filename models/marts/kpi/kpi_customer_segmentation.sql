@@ -1,7 +1,8 @@
 with
 
 customers as (
-    select * from {{ref('dim_customer')}}
+    select * from {{ref('registry_dim_customer')}}
+    {{ apply_partition_date() }}
 ),
 
 final as (

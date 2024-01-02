@@ -4,18 +4,26 @@
 with
 
 orders as (
-    select * from {{ref('fct_orders')}}
+    select * from {{ref('registry_fct_orders')}}
+    {{ apply_partition_date() }}
+),
+
+orders_filtered as (
+    select *
+    from orders
+    {{ write_where_by_vars() }}
+    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 customers_beginning_of_period as (
     select distinct custkey
-    from orders
+    from orders_filtered
     where orderdate <= '{{startPeriod}}'
 ),
 
 customers_end_of_period as (
     select distinct custkey
-    from orders
+    from orders_filtered
     where orderdate >= '{{startPeriod}}' and orderdate <= '{{endPeriod}}'
 ),
 

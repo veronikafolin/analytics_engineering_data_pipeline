@@ -9,7 +9,7 @@ with
 customer as (
     select *
     from {{ref('registry_stg_customer')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_customer')}}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_customer')}})
 ),
 
 nation as (

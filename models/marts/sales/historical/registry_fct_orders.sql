@@ -9,13 +9,13 @@ with
 orders as (
     select *
     from {{ref('registry_stg_orders')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_orders')}}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_orders')}})
 ),
 
 customer as (
     select *
     from {{ref('registry_dim_customer')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_customer')}}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_customer')}})
 ),
 
 final as (
