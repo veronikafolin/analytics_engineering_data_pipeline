@@ -9,19 +9,19 @@ with
 lineitem as (
     select *
     from {{ref('registry_stg_lineitem')}}
-    {{ apply_partition_date() }}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_lineitem')}}
 ),
 
 orders as (
     select *
     from {{ref('registry_fct_orders')}}
-    {{ apply_partition_date() }}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_fct_orders')}}
 ),
 
 supplier as (
     select *
     from {{ref('registry_dim_supplier')}}
-    {{ apply_partition_date() }}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_supplier')}}
 ),
 
 final as (

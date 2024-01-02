@@ -9,7 +9,7 @@ with
 supplier as (
     select *
     from {{ref('registry_stg_supplier')}}
-    {{ apply_partition_date() }}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_stg_supplier')}}
 ),
 
 nation as (
