@@ -67,12 +67,12 @@ registry_fct_sales:
     dbt_snapshot_lineitem:
       operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
       models: 'snapshot_lineitem'
-    trigger_orders_dag:
-      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-      trigger_dag_id: 'registry_fct_orders'
-      wait_for_completion: True
-      deferrable: True
-      failed_states: [ 'failed' ]
+#    trigger_orders_dag:
+#      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+#      trigger_dag_id: 'registry_fct_orders'
+#      wait_for_completion: True
+#      deferrable: True
+#      failed_states: [ 'failed' ]
     trigger_supplier_dag:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
       trigger_dag_id: 'registry_dim_supplier'
@@ -111,7 +111,8 @@ registry_fct_sales:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_fct_sales'
       trigger_rule: 'none_failed'
-      dependencies: [ dbt_test_registry_stg_lineitem, trigger_orders_dag, trigger_supplier_dag ]
+#      dependencies: [ dbt_test_registry_stg_lineitem, trigger_orders_dag, trigger_supplier_dag ]
+      dependencies: [ dbt_test_registry_stg_lineitem, trigger_supplier_dag ]
     dbt_test_registry_fct_sales:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_fct_sales'

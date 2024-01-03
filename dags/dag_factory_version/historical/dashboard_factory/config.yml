@@ -7,12 +7,19 @@ materialize_registries:
   dagrun_timeout_sec: 3600
   description: "To materialize historicized tables"
   tasks:
+    trigger_registry_fct_orders:
+      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+      trigger_dag_id: 'registry_fct_orders'
+      wait_for_completion: True
+      deferrable: True
+      failed_states: [ 'failed' ]
     trigger_registry_fct_sales:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
       trigger_dag_id: 'registry_fct_sales'
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
+      dependencies: [ trigger_registry_fct_orders ]
     trigger_registry_fct_inventory:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
       trigger_dag_id: 'registry_fct_inventory'
