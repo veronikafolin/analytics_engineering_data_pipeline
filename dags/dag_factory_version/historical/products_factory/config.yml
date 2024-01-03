@@ -18,7 +18,6 @@ registry_dim_part:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
         AND    table_name   = 'REGISTRY_STG_PART'
-      retries: 0
     branch_on_registry_stg_part_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/products_factory/utils.py
@@ -69,7 +68,6 @@ registry_fct_inventory:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
         AND    table_name   = 'REGISTRY_STG_PARTSUPP'
-      retries: 0
     branch_on_registry_stg_partsupp_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/products_factory/utils.py

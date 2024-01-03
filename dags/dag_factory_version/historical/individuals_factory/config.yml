@@ -19,7 +19,6 @@ registry_dim_customer:
             SELECT * FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
             WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
             AND    table_name   = 'INT_NATION' );
-      retries: 0
     branch_on_int_nation_existence:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
@@ -33,7 +32,6 @@ registry_dim_customer:
       wait_for_completion: True
       deferrable: True
       failed_states: ['failed']
-      retries: 0
       dependencies: [ branch_on_int_nation_existence ]
     check_registry_stg_customer_initialization:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
@@ -42,7 +40,6 @@ registry_dim_customer:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
         AND    table_name   = 'REGISTRY_STG_CUSTOMER'
-      retries: 0
     branch_on_registry_stg_customer_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
@@ -94,7 +91,6 @@ registry_dim_supplier:
             SELECT * FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
             WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
             AND    table_name   = 'INT_NATION' );
-      retries: 0
     branch_on_int_nation_existence:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
@@ -108,7 +104,6 @@ registry_dim_supplier:
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
-      retries: 0
       dependencies: [ branch_on_int_nation_existence ]
     check_registry_stg_supplier_initialization:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
@@ -117,7 +112,6 @@ registry_dim_supplier:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
         AND    table_name   = 'REGISTRY_STG_SUPPLIER'
-      retries: 0
     branch_on_registry_stg_supplier_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py

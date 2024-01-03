@@ -24,7 +24,6 @@ registry_fct_orders:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
         AND    table_name   = 'REGISTRY_STG_ORDERS'
-      retries: 0
     branch_on_registry_stg_orders_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/sales_factory/utils.py
@@ -87,7 +86,6 @@ registry_fct_sales:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
         AND    table_name   = 'REGISTRY_STG_LINEITEM'
-      retries: 0
     branch_on_registry_stg_lineitem_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/sales_factory/utils.py
