@@ -50,6 +50,14 @@ registry_dim_part:
       models: 'registry_dim_part'
       dependencies: [ dbt_run_registry_dim_part ]
 registry_fct_inventory:
+  default_args:
+    owner: 'v.folin@reply.it'
+    start_date: 2023-12-20
+    retries: 1
+    retry_delay_sec: 60
+  schedule_interval: None
+  dagrun_timeout_sec: 3600
+  description: "To materialize historicized inventory' fact table"
   tasks:
     dbt_snapshot_partsupp:
       operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
