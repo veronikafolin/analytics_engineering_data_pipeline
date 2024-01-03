@@ -7,4 +7,5 @@ README.md
 *.json
 target
 docs
-backup_dags
+dags_backup
+models_backup

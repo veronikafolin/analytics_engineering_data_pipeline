@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: tpch_sf1
+    database: snowflake_sample_data
+    schema: tpch_sf1
+    tables:
+      - name: customer
+      - name: lineitem
+      - name: nation
+      - name: orders
+      - name: part
+      - name: partsupp
+      - name: region
+      - name: supplier
+  - name: elementary
+    database: analytics
+    schema: dbt_core_reusable_demo_elementary
+    tables:
+      - name: dbt_tests
+      - name: elementary_test_results
