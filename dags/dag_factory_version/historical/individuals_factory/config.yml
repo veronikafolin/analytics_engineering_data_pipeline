@@ -23,7 +23,7 @@ registry_dim_customer:
     branch_on_int_nation_existence:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
-      python_callable_name: branch_func_on_on_int_nation_existence
+      python_callable_name: branch_func_customer_on_int_nation_existence
       provide_context: True
       trigger_rule: 'all_done'
       dependencies: [ check_int_nation_existence ]
@@ -46,7 +46,7 @@ registry_dim_customer:
     branch_on_registry_stg_customer_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
-      python_callable_name: branch_func_on_on_registry_stg_customer_initialization
+      python_callable_name: branch_func_on_registry_stg_customer_initialization
       provide_context: True
       trigger_rule: 'all_done'
       dependencies: [ dbt_snapshot_customer, check_registry_stg_customer_initialization ]
@@ -73,35 +73,78 @@ registry_dim_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_dim_customer'
       dependencies: [ dbt_run_registry_dim_customer ]
-int_nation:
+registry_dim_supplier:
   default_args:
     owner: 'v.folin@reply.it'
-    start_date: 2023-12-08
+    start_date: 2023-12-20
     retries: 1
     retry_delay_sec: 60
+    snowflake_conn_id: snowflake
   schedule_interval: None
   dagrun_timeout_sec: 3600
-  description: "To materialize nations' intermediate table"
+  description: "To materialize historicized suppliers' dimension table"
   tasks:
-    dbt_run_stg_nation:
+    dbt_snapshot_supplier:
+      operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
+      models: 'snapshot_supplier'
+    check_int_nation_existence:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT EXISTS (
+            SELECT * FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
+            WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+            AND    table_name   = 'INT_NATION' );
+      retries: 0
+    branch_on_int_nation_existence:
+      operator: airflow.operators.python.BranchPythonOperator
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
+      python_callable_name: branch_func_supplier_on_int_nation_existence
+      provide_context: True
+      trigger_rule: 'all_done'
+      dependencies: [ check_int_nation_existence ]
+    trigger_nation_dag:
+      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+      trigger_dag_id: 'int_nation'
+      wait_for_completion: True
+      deferrable: True
+      failed_states: [ 'failed' ]
+      retries: 0
+      dependencies: [ branch_on_int_nation_existence ]
+    check_registry_stg_supplier_initialization:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT ROW_COUNT
+        FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
+        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        AND    table_name   = 'REGISTRY_STG_SUPPLIER'
+      retries: 0
+    branch_on_registry_stg_supplier_initialization:
+      operator: airflow.operators.python.BranchPythonOperator
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/individuals_factory/utils.py
+      python_callable_name: branch_func_on_registry_stg_supplier_initialization
+      provide_context: True
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_snapshot_supplier, check_registry_stg_supplier_initialization ]
+    dbt_run_registry_stg_supplier:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'stg_nation'
-    dbt_test_stg_nation:
-      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'stg_nation'
-      dependencies: [ dbt_run_stg_nation ]
-    dbt_run_stg_region:
+      models: 'registry_stg_supplier'
+      dependencies: [ branch_on_registry_stg_supplier_initialization ]
+    dbt_run_registry_stg_supplier_full_refresh:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'stg_region'
-    dbt_test_stg_region:
+      models: 'registry_stg_supplier'
+      full_refresh: True
+      dependencies: [ branch_on_registry_stg_supplier_initialization ]
+    dbt_test_registry_stg_supplier:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'stg_region'
-      dependencies: [ dbt_run_stg_region ]
-    dbt_run_int_nation:
+      models: 'registry_stg_supplier'
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_run_registry_stg_supplier, dbt_run_registry_stg_supplier_full_refresh ]
+    dbt_run_registry_dim_supplier:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'int_nation'
-      dependencies: [ dbt_test_stg_nation, dbt_test_stg_region ]
-    dbt_test_int_nation:
+      models: 'registry_dim_supplier'
+      trigger_rule: 'none_failed'
+      dependencies: [ branch_on_int_nation_existence, trigger_nation_dag, dbt_test_registry_stg_supplier ]
+    dbt_test_registry_dim_supplier:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'int_nation'
-      dependencies: [ dbt_run_int_nation ]
+      models: 'registry_dim_supplier'
+      dependencies: [ dbt_run_registry_dim_supplier ]

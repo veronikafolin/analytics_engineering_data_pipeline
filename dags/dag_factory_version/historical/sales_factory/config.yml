@@ -17,19 +17,104 @@ registry_fct_orders:
       wait_for_completion: True
       deferrable: True
       failed_states: ['failed']
+    check_registry_stg_orders_initialization:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT ROW_COUNT
+        FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
+        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        AND    table_name   = 'REGISTRY_STG_ORDERS'
+      retries: 0
+    branch_on_registry_stg_orders_initialization:
+      operator: airflow.operators.python.BranchPythonOperator
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/sales_factory/utils.py
+      python_callable_name: branch_func_on_registry_stg_orders_initialization
+      provide_context: True
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_snapshot_orders, check_registry_stg_orders_initialization ]
     dbt_run_registry_stg_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_stg_orders'
-      dependencies: [ dbt_snapshot_orders ]
+      dependencies: [ branch_on_registry_stg_orders_initialization ]
+    dbt_run_registry_stg_orders_full_refresh:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'registry_stg_orders'
+      full_refresh: True
+      dependencies: [ branch_on_registry_stg_orders_initialization ]
     dbt_test_registry_stg_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_stg_orders'
-      dependencies: [ dbt_run_registry_stg_orders ]
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_run_registry_stg_orders, dbt_run_registry_stg_orders_full_refresh ]
     dbt_run_registry_fct_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_fct_orders'
+      trigger_rule: 'none_failed'
       dependencies: [ dbt_test_registry_stg_orders, trigger_customer_dag ]
     dbt_test_registry_fct_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_fct_orders'
       dependencies: [ dbt_run_registry_fct_orders ]
+registry_fct_sales:
+  default_args:
+    owner: 'v.folin@reply.it'
+    start_date: 2023-12-20
+    retries: 1
+    retry_delay_sec: 60
+  schedule_interval: None
+  dagrun_timeout_sec: 3600
+  description: "To materialize historicized sales' fact table"
+  tasks:
+    dbt_snapshot_lineitem:
+      operator: airflow_dbt.operators.dbt_operator.DbtSnapshotOperator
+      models: 'snapshot_lineitem'
+    trigger_orders_dag:
+      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+      trigger_dag_id: 'registry_fct_orders'
+      wait_for_completion: True
+      deferrable: True
+      failed_states: [ 'failed' ]
+    trigger_supplier_dag:
+      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+      trigger_dag_id: 'registry_dim_supplier'
+      wait_for_completion: True
+      deferrable: True
+      failed_states: [ 'failed' ]
+    check_registry_stg_lineitem_initialization:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT ROW_COUNT
+        FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
+        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        AND    table_name   = 'REGISTRY_STG_LINEITEM'
+      retries: 0
+    branch_on_registry_stg_lineitem_initialization:
+      operator: airflow.operators.python.BranchPythonOperator
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/sales_factory/utils.py
+      python_callable_name: branch_func_on_registry_stg_lineitem_initialization
+      provide_context: True
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_snapshot_lineitem, check_registry_stg_lineitem_initialization ]
+    dbt_run_registry_stg_lineitem:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'registry_stg_lineitem'
+      dependencies: [ branch_on_registry_stg_lineitem_initialization ]
+    dbt_run_registry_stg_lineitem_full_refresh:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'registry_stg_lineitem'
+      full_refresh: True
+      dependencies: [ branch_on_registry_stg_lineitem_initialization ]
+    dbt_test_registry_stg_lineitem:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      models: 'registry_stg_lineitem'
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_run_registry_stg_lineitem, dbt_run_registry_stg_lineitem_full_refresh ]
+    dbt_run_registry_fct_sales:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'registry_fct_sales'
+      trigger_rule: 'none_failed'
+      dependencies: [ dbt_test_registry_stg_lineitem, trigger_orders_dag, trigger_supplier_dag ]
+    dbt_test_registry_fct_sales:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
+      models: 'registry_fct_sales'
+      dependencies: [ dbt_run_registry_fct_sales ]
