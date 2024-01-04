@@ -9,10 +9,18 @@ kpi:
   schedule_interval: None
   dagrun_timeout_sec: 3600
   description: "To compute KPIs and send alerts"
+  params:
+    groupBy: [ ]
+    filters: [ ]
+    startPeriod: '1994-01-01'
+    endPeriod: '1994-12-31'
+    partitionByDate: CURRENT_DATE()
+  render_template_as_native_obj: True
   tasks:
     compute_supplier_lead_time:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_supplier_lead_time'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
     check_supplier_lead_time:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
