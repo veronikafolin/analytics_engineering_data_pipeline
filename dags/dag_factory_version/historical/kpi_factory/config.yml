@@ -29,3 +29,15 @@ kpi:
               FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_SUPPLIER_LEAD_TIME
               WHERE AVG_DELIVERY_DAYS > 15 );
       dependencies: [ compute_supplier_lead_time ]
+    compute_revenue:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_revenue'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+    check_revenue:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT NOT EXISTS (
+          SELECT *
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_REVENUE
+          WHERE AVG_REVENUE < 150000 );
+      dependencies: [ compute_revenue ]

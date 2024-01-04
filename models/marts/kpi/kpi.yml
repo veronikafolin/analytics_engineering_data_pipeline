@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: kpi_revenue
-    description: Total sales generated from customer orders.
+    description: Average sales generated from customer orders.
   - name: kpi_average_order_value
     description: The average value of each customer order.
   - name: kpi_customer_churn_rate
