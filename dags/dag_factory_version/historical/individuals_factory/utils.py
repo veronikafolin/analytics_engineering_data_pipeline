@@ -5,7 +5,7 @@ import common_utils
 def branch_func_customer_on_int_nation_existence(**kwargs):
     task_status = common_utils.get_internal_task_state('check_int_nation_existence', **kwargs)
     if task_status == State.SUCCESS:
-        return 'dbt_run_registry_dim_customer'
+        return 'dbt_test_registry_stg_customer'
     else:
         return 'trigger_nation_dag'
 
@@ -13,7 +13,7 @@ def branch_func_customer_on_int_nation_existence(**kwargs):
 def branch_func_supplier_on_int_nation_existence(**kwargs):
     task_status = common_utils.get_internal_task_state('check_int_nation_existence', **kwargs)
     if task_status == State.SUCCESS:
-        return 'dbt_run_registry_dim_supplier'
+        return 'dbt_test_registry_stg_supplier'
     else:
         return 'trigger_nation_dag'
 

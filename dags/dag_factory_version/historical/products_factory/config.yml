@@ -89,8 +89,8 @@ registry_fct_inventory:
     dbt_test_registry_stg_partsupp:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_stg_partsupp'
-      trigger_rule: 'all_done'
-      dependencies: [ dbt_run_registry_stg_partsupp, dbt_run_registry_stg_partsupp_full_refresh ]
+      trigger_rule: 'none_failed'
+      dependencies: [ dbt_run_registry_stg_partsupp, dbt_run_registry_stg_partsupp_full_refresh, trigger_part_dag ]
     trigger_part_dag:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
       trigger_dag_id: 'registry_dim_part'
@@ -100,8 +100,7 @@ registry_fct_inventory:
     dbt_run_registry_fct_inventory:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_fct_inventory'
-      trigger_rule: 'none_failed'
-      dependencies: [ dbt_test_registry_stg_partsupp, trigger_part_dag ]
+      dependencies: [ dbt_test_registry_stg_partsupp ]
     dbt_test_registry_fct_inventory:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_fct_inventory'
