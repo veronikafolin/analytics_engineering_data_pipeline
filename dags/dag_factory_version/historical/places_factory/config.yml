@@ -38,11 +38,11 @@ int_nation:
     dbt_test_stg_nation:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'stg_nation'
-      dependencies: [ dbt_run_stg_nation ]
+      dependencies: [ dbt_test_stg_region ]
     dbt_run_int_nation:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'int_nation'
-      dependencies: [ dbt_test_stg_nation, dbt_test_stg_region]
+      dependencies: [ dbt_test_stg_nation]
     dbt_test_int_nation:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'int_nation'
