@@ -20,3 +20,15 @@
     {% endif %}
 
 {% endmacro %}
+
+{% macro write_groupByColumns_by_vars() %}
+
+{% set groupBycolumns = var("groupBy") %}
+
+    {% if groupBycolumns|length > 0 %}
+        {% for col in groupBycolumns %}
+        , {{col}}
+        {% endfor %}
+    {% endif %}
+
+{% endmacro %}
