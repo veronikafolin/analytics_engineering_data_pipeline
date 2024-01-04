@@ -13,8 +13,7 @@ filtered_sales as (
 
 delivery_time as (
     select
-        shipdate,
-        receiptdate,
+        *,
         datediff(day, shipdate, receiptdate) as delivery_days
     from filtered_sales
 ),
