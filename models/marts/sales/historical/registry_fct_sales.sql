@@ -21,7 +21,7 @@ orders as (
 supplier as (
     select *
     from {{ref('registry_dim_supplier')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_supplier')}}
+    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_supplier')}})
 ),
 
 final as (
