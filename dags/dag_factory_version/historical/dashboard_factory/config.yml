@@ -40,7 +40,7 @@ materialize_registries:
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
-      dependencies: [ trigger_registry_fct_orders ]
+      dependencies: [ trigger_registry_fct_orders, trigger_registry_fct_inventory ]
 registry_volume_orders:
   default_args:
     owner: 'v.folin@reply.it'
