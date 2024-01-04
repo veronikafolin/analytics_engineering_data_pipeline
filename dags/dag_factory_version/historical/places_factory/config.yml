@@ -8,9 +8,24 @@ int_nation:
   dagrun_timeout_sec: 3600
   description: "To materialize nations' intermediate table"
   tasks:
+    check_int_nation_existence:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT EXISTS (
+            SELECT * FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
+            WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+            AND    table_name   = 'INT_NATION' );
+    branch_on_int_nation_existence:
+      operator: airflow.operators.python.BranchPythonOperator
+      python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/places_factory/utils.py
+      python_callable_name: branch_func_on_int_nation_existence
+      provide_context: True
+      trigger_rule: 'all_done'
+      dependencies: [ check_int_nation_existence ]
     dbt_run_stg_nation:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_nation'
+      dependencies: [ branch_on_int_nation_existence ]
     dbt_test_stg_nation:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'stg_nation'
