@@ -38,12 +38,11 @@ registry_dim_part:
     dbt_test_registry_stg_part:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
       models: 'registry_stg_part'
-      trigger_rule: 'all_done'
+      trigger_rule: 'none_failed'
       dependencies: [ dbt_run_registry_stg_part, dbt_run_registry_stg_part_full_refresh ]
     dbt_run_registry_dim_part:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'registry_dim_part'
-      trigger_rule: 'none_failed'
       dependencies: [ dbt_test_registry_stg_part ]
     dbt_test_registry_dim_part:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
