@@ -5,17 +5,12 @@ sales as (
     {{ apply_partition_date() }}
 ),
 
-filtered_sales as (
-    select *
-    from sales
-),
-
 delivery_time as (
     select
         shipdate,
         receiptdate,
         datediff(day, shipdate, receiptdate) as delivery_days
-    from filtered_sales
+    from sales
 ),
 
 final as (
