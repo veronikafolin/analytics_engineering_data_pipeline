@@ -40,9 +40,9 @@ kpi_supplier_lead_time:
   dagrun_timeout_sec: 3600
   description: "To compute the time it takes suppliers to deliver orders."
   params:
-    groupBy: [ ]
-    filters: [ ]
-    partitionByDate: CURRENT_DATE()
+    groupBy: conf.params.groupBy
+    filters: conf.params.filters
+    partitionByDate: conf.params.partitionByDate
   render_template_as_native_obj: True
   tasks:
     compute_supplier_lead_time:
