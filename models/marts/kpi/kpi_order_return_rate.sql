@@ -47,5 +47,4 @@ final as (
 --        (select count(*) from filtered_sales)) * 100
 --        as order_return_rate
 --)
-
 select * from final
