@@ -103,5 +103,11 @@ kpi:
         SELECT NOT EXISTS (
           SELECT *
           FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_GROSS_PROFIT_MARGIN
-          WHERE PROFIT < (REVENUE*0.1);
+          WHERE PROFIT < (REVENUE*0.1));
+      dependencies: [ compute_gross_profit_margin ]
+    compute_customer_segmentation:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_customer_segmentation'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
       dependencies: [ compute_gross_profit_margin ]
