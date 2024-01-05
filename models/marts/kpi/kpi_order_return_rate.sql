@@ -33,13 +33,6 @@ grouped_returned_sales as (
     {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
---final as (
---    select
---        ((select count(*) from returned_sales) /
---        (select count(*) from filtered_sales)) * 100
---        as order_return_rate
---)
-
 final as (
     select
         grouped_filtered_sales.number_of_sales,
@@ -47,5 +40,12 @@ final as (
         (number_of_returned_sales/number_of_sales)*100 as order_return_rate
     from grouped_filtered_sales INNER JOIN grouped_returned_sales
 )
+
+--final as (
+--    select
+--        ((select count(*) from returned_sales) /
+--        (select count(*) from filtered_sales)) * 100
+--        as order_return_rate
+--)
 
 select * from final
