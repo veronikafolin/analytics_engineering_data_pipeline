@@ -16,6 +16,7 @@ filtered_sales as (
 
 returned_sales as (
     select
+        returnflag,
         {{ write_select_groupByColumns_by_vars() }}
         count(*) as number_of_sales
     from filtered_sales

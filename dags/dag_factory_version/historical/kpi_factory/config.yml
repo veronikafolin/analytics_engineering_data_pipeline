@@ -33,6 +33,7 @@ kpi:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_revenue'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
       dependencies: [ compute_supplier_lead_time ]
     check_revenue:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
@@ -46,11 +47,13 @@ kpi:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_product_popularity'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
       dependencies: [ compute_revenue ]
     compute_order_return_rate:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_order_return_rate'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
       dependencies: [ compute_product_popularity ]
     check_order_return_rate:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
@@ -64,6 +67,7 @@ kpi:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_order_fulfillment_time'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
       dependencies: [ compute_order_return_rate ]
     check_order_fulfillment_time:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
