@@ -45,3 +45,7 @@ kpi:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_product_popularity'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+    compute_order_return_rate:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_order_return_rate'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
