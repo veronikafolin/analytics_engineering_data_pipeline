@@ -35,10 +35,20 @@ grouped_returned_sales as (
 
 final as (
     select
-        (select number_of_returned_sales from grouped_returned_sales) as number_of_returned_sales,
-        (select number_of_sales from grouped_filtered_sales) as number_of_sales,
+        {{ write_select_groupByColumns_by_vars_from_table(grouped_filtered_sales) }}
+        grouped_filtered_sales.number_of_sales,
+        grouped_returned_sales.number_of_returned_sales,
         (number_of_returned_sales/number_of_sales)*100 as order_return_rate
+    from grouped_filtered_sales INNER JOIN grouped_returned_sales
+    {{ write_groupBY_groupByColumns_by_vars_from_table(grouped_filtered_sales) }}
 )
+
+--final as (
+--    select
+--        (select number_of_returned_sales from grouped_returned_sales) as number_of_returned_sales,
+--        (select number_of_sales from grouped_filtered_sales) as number_of_sales,
+--        (number_of_returned_sales/number_of_sales)*100 as order_return_rate
+--)
 
 --final as (
 --    select
