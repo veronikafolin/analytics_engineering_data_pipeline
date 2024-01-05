@@ -77,3 +77,17 @@ kpi:
           FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_FULFILLMENT_TIME
           WHERE AVG_FULFILLMENT_DAYS > 80 );
       dependencies: [ compute_order_fulfillment_time ]
+    compute_order_order_accuracy_rate:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_order_accuracy_rate'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
+      dependencies: [ compute_order_fulfillment_time ]
+    check_order_accuracy_rate:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT NOT EXISTS (
+          SELECT *
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_ACCURACY_RATE
+          WHERE ORDER_ACCURACY_RATE > 50 );
+      dependencies: [ compute_order_order_accuracy_rate ]
