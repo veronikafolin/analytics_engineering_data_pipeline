@@ -25,9 +25,9 @@ kpi:
       failed_states: [ 'failed' ]
       conf:
         params:
-          groupBy: "{{ params.groupBy }}"
-          filters: "{{ params.filters }}"
-          partitionByDate: "{{ params.partitionByDate }}"
+          groupBy: {{ params.groupBy }}
+          filters: {{ params.filters }}
+          partitionByDate: {{ params.partitionByDate }}
 kpi_supplier_lead_time:
   default_args:
     owner: 'v.folin@reply.it'
@@ -40,9 +40,9 @@ kpi_supplier_lead_time:
   dagrun_timeout_sec: 3600
   description: "To compute the time it takes suppliers to deliver orders."
   params:
-    groupBy: {{ conf.params.groupBy }}
-    filters: {{ conf.params.filters }}
-    partitionByDate: {{ conf.params.partitionByDate }}
+    groupBy: [ ]
+    filters: [ ]
+    partitionByDate: CURRENT_DATE()
   render_template_as_native_obj: True
   tasks:
     compute_supplier_lead_time:
