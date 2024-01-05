@@ -45,7 +45,7 @@ final as (
         grouped_filtered_sales.number_of_sales,
         grouped_returned_sales.number_of_returned_sales,
         (number_of_returned_sales/number_of_sales)*100 as order_return_rate
-    from grouped_filtered_sales FULL OUTER JOIN grouped_returned_sales
+    from grouped_filtered_sales INNER JOIN grouped_returned_sales
 )
 
 select * from final
