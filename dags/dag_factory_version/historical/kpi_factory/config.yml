@@ -24,9 +24,9 @@ kpi:
       deferrable: True
       failed_states: [ 'failed' ]
       conf:
-        groupBy: "{{ params.groupBy }}"
-        filters: "{{ params.filters }}"
-        partitionByDate: "{{ params.partitionByDate }}"
+        groupBy: {{ params.groupBy }}
+        filters: {{ params.filters }}
+        partitionByDate: {{ params.partitionByDate }}
 kpi_supplier_lead_time:
   default_args:
     owner: 'v.folin@reply.it'
