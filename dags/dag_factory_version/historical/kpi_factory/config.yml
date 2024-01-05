@@ -43,7 +43,7 @@ kpi_supplier_lead_time:
     compute_supplier_lead_time:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_supplier_lead_time'
-      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      vars: { 'groupBy': "{{ conf.params.groupBy }}", 'filters': "{{ conf.params.filters }}", 'partitionByDate': "{{ conf.params.partitionByDate }}" }
     check_supplier_lead_time:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
