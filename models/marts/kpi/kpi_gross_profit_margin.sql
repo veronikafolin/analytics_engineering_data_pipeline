@@ -5,38 +5,40 @@ sales as (
     {{ apply_partition_date() }}
 ),
 
-filtered_sales as (
-    select *
-    from sales
-    {{ write_where_by_vars() }}
-    {{ write_groupBY_groupByColumns_by_vars() }}
-),
-
 inventory as (
     select * from {{ref('registry_fct_inventory')}}
     {{ apply_partition_date() }}
 ),
 
-filtered_inventory as (
+filtered_sales as (
     select *
-    from inventory
+    from sales
     {{ write_where_by_vars() }}
-    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
-profit as (
-    select
-        sales.discounted_extended_price as revenue,
-        (inventory.supplycost * sales.quantity) as cost_of_good_sold,
-        (revenue - cost_of_good_sold) as profit
-    from filtered_sales
-    join filtered_inventory using(partsuppkey)
-),
+--profit as (
+--    select
+--        filtered_sales.discounted_extended_price as revenue,
+--        (inventory.supplycost * sales.quantity) as cost_of_good_sold,
+--        (revenue - cost_of_good_sold) as profit
+--    from filtered_sales
+--    join inventory using(partsuppkey)
+--),
+--
+--final as (
+--    select
+--        ((sum(revenue) - sum(cost_of_good_sold))/sum(revenue)) * 100 as gross_profit_margin
+--    from profit
+--)
 
 final as (
     select
-        ((sum(revenue) - sum(cost_of_good_sold))/sum(revenue)) * 100 as gross_profit_margin
-    from profit
+        {{ write_select_groupByColumns_by_vars_from_table('filtered_sales') }}
+        sum(filtered_sales.discounted_extended_price) as revenue,
+        sum(inventory.supplycost * filtered_sales.quantity) as cost_of_good_sold,
+        sum(filtered_sales.discounted_extended_price - (inventory.supplycost * filtered_sales.quantity)) as profit
+    from filtered_sales join inventory using(partsuppkey)
+    {{ write_groupBY_groupByColumns_by_vars_from_table('filtered_sales') }}
 )
 
 select * from final
