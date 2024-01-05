@@ -35,9 +35,9 @@ grouped_returned_sales as (
 
 final as (
     select
-        ((select number_of_returned_sales from grouped_returned_sales) /
-        (select number_of_sales from grouped_filtered_sales)) * 100
-        as order_return_rate
+        (select number_of_returned_sales from grouped_returned_sales) as number_of_returned_sales,
+        (select number_of_sales from grouped_filtered_sales) as number_of_sales,
+        (number_of_returned_sales/number_of_sales)*100 as order_return_rate
 )
 
 --final as (
