@@ -24,9 +24,9 @@ kpi:
       deferrable: True
       failed_states: [ 'failed' ]
       conf:
-        groupBy: {{ params.groupBy }}
-        filters: {{ params.filters }}
-        partitionByDate: {{ params.partitionByDate }}
+        groupBy: "{{ params.groupBy }}"
+        filters: "{{ params.filters }}"
+        partitionByDate: "{{ params.partitionByDate }}"
 kpi_supplier_lead_time:
   default_args:
     owner: 'v.folin@reply.it'
@@ -42,7 +42,7 @@ kpi_supplier_lead_time:
     compute_supplier_lead_time:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_supplier_lead_time'
-      vars: { 'groupBy': "{{ dag_run.conf.groupBy }}", 'filters': "{{ dag_run.conf.filters }}", 'partitionByDate': "{{ dag_run.conf.partitionByDate }}" }
+      vars: { 'groupBy': {{ dag_run.conf.groupBy }}, 'filters': {{ dag_run.conf.filters }}, 'partitionByDate': {{ dag_run.conf.partitionByDate }} }
     check_supplier_lead_time:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
