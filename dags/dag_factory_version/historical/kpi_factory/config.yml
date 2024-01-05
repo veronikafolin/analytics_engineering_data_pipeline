@@ -1,4 +1,4 @@
-kpi:
+kpi_sales:
   default_args:
     owner: 'v.folin@reply.it'
     email: ['v.folin@reply.it']
@@ -8,12 +8,10 @@ kpi:
     snowflake_conn_id: snowflake
   schedule_interval: None
   dagrun_timeout_sec: 3600
-  description: "To compute KPIs and send alerts"
+  description: "To compute and check KPIs on sales"
   params:
     groupBy: [ ]
     filters: [ ]
-    startPeriod: '1994-01-01'
-    endPeriod: '1994-12-31'
     partitionByDate: CURRENT_DATE()
   render_template_as_native_obj: True
   tasks:
@@ -29,74 +27,46 @@ kpi:
               FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_SUPPLIER_LEAD_TIME
               WHERE AVG_DELIVERY_DAYS > 16 );
       dependencies: [ compute_supplier_lead_time ]
-    compute_revenue:
-      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'kpi_revenue'
-      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-      trigger_rule: 'all_done'
-      dependencies: [ compute_supplier_lead_time ]
-    check_revenue:
-      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
-      sql: |
-        SELECT NOT EXISTS (
-          SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_REVENUE
-          WHERE AVG_REVENUE < 150000 );
-      dependencies: [ compute_revenue ]
     compute_product_popularity:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_product_popularity'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
       trigger_rule: 'all_done'
-      dependencies: [ compute_revenue ]
-    compute_order_return_rate:
+      dependencies: [ compute_supplier_lead_time ]
+    compute_sales_return_rate:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'kpi_order_return_rate'
+      models: 'kpi_sales_return_rate'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
       trigger_rule: 'all_done'
       dependencies: [ compute_product_popularity ]
-    check_order_return_rate:
+    check_sales_return_rate:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_RETURN_RATE
-          WHERE ORDER_RETURN_RATE > 25 );
-      dependencies: [ compute_order_return_rate ]
-    compute_order_fulfillment_time:
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_SALES_RETURN_RATE
+          WHERE SALES_RETURN_RATE > 25 );
+      dependencies: [ compute_sales_return_rate ]
+    compute_sales_fulfillment_time:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'kpi_order_fulfillment_time'
+      models: 'kpi_sales_fulfillment_time'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
       trigger_rule: 'all_done'
-      dependencies: [ compute_order_return_rate ]
-    check_order_fulfillment_time:
+      dependencies: [ compute_sales_return_rate ]
+    check_sales_fulfillment_time:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_FULFILLMENT_TIME
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_SALES_FULFILLMENT_TIME
           WHERE AVG_FULFILLMENT_DAYS > 80 );
-      dependencies: [ compute_order_fulfillment_time ]
-    compute_order_accuracy_rate:
-      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'kpi_order_accuracy_rate'
-      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-      trigger_rule: 'all_done'
-      dependencies: [ compute_order_fulfillment_time ]
-    check_order_accuracy_rate:
-      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
-      sql: |
-        SELECT NOT EXISTS (
-          SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_ACCURACY_RATE
-          WHERE ORDER_ACCURACY_RATE > 50 );
-      dependencies: [ compute_order_accuracy_rate ]
+      dependencies: [ compute_sales_fulfillment_time ]
     compute_gross_profit_margin:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_gross_profit_margin'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
       trigger_rule: 'all_done'
-      dependencies: [ compute_order_accuracy_rate ]
+      dependencies: [ compute_sales_fulfillment_time ]
     check_gross_profit_margin:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
@@ -111,3 +81,50 @@ kpi:
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
       trigger_rule: 'all_done'
       dependencies: [ compute_gross_profit_margin ]
+kpi_orders:
+  default_args:
+    owner: 'v.folin@reply.it'
+    email: [ 'v.folin@reply.it' ]
+    email_on_failure: True
+    start_date: 2023-12-28
+    retries: 0
+    snowflake_conn_id: snowflake
+  schedule_interval: None
+  dagrun_timeout_sec: 3600
+  description: "To compute and check KPIs on orders"
+  params:
+    groupBy: [ ]
+    filters: [ ]
+    startPeriod: '1994-01-01'
+    endPeriod: '1994-12-31'
+    partitionByDate: CURRENT_DATE()
+  render_template_as_native_obj: True
+  tasks:
+    compute_revenue:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_revenue'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
+      dependencies: [ compute_supplier_lead_time ]
+    check_revenue:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT NOT EXISTS (
+          SELECT *
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_REVENUE
+          WHERE AVG_REVENUE < 150000 );
+      dependencies: [ compute_revenue ]
+    compute_order_accuracy_rate:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_order_accuracy_rate'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+      trigger_rule: 'all_done'
+      dependencies: [ compute_revenue ]
+    check_order_accuracy_rate:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT NOT EXISTS (
+          SELECT *
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_ACCURACY_RATE
+          WHERE ORDER_ACCURACY_RATE > 50 );
+      dependencies: [ compute_order_accuracy_rate ]

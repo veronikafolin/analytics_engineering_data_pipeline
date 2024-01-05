@@ -38,7 +38,7 @@ final as (
         {{ write_select_groupByColumns_by_vars_from_table('grouped_filtered_sales') }}
         CAST(avg(grouped_filtered_sales.number_of_sales) AS INT) as number_of_sales,
         CAST(avg(grouped_returned_sales.number_of_returned_sales) AS INT) as number_of_returned_sales,
-        CAST(avg((number_of_returned_sales/number_of_sales)*100) AS DECIMAL(10,2)) as order_return_rate
+        CAST(avg((number_of_returned_sales/number_of_sales)*100) AS DECIMAL(10,2)) as sales_return_rate
     from grouped_filtered_sales INNER JOIN grouped_returned_sales
     {{ write_groupBY_groupByColumns_by_vars_from_table('grouped_filtered_sales') }}
 )
