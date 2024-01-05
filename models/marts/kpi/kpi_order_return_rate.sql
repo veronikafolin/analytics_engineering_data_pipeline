@@ -6,21 +6,30 @@ sales as (
 ),
 
 filtered_sales as (
+    select *
+    from sales
+    {{ write_where_by_vars() }}
+),
+
+grouped_filtered_sales as (
     select
         {{ write_select_groupByColumns_by_vars() }}
         count(*) as number_of_sales
-    from sales
-    {{ write_where_by_vars() }}
+    from filtered_sales
     {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 returned_sales as (
-    select
-        returnflag,
-        {{ write_select_groupByColumns_by_vars() }}
-        count(*) as number_of_sales
+    select *
     from filtered_sales
     where returnflag = 'R'
+),
+
+grouped_returned_sales as (
+    select
+        {{ write_select_groupByColumns_by_vars() }}
+        count(*) as number_of_sales
+    from returned_sales
     {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
@@ -33,8 +42,8 @@ returned_sales as (
 
 final as (
     select
-        ((select number_of_sales from returned_sales) /
-        (select number_of_sales from filtered_sales)) * 100
+        ((select number_of_sales from grouped_filtered_sales) /
+        (select number_of_sales from grouped_returned_sales)) * 100
         as order_return_rate
 )
 
