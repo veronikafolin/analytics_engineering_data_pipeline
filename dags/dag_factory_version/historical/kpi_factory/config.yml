@@ -39,11 +39,6 @@ kpi_supplier_lead_time:
   schedule_interval: None
   dagrun_timeout_sec: 3600
   description: "To compute the time it takes suppliers to deliver orders."
-  params:
-    groupBy: [ ]
-    filters: [ ]
-    partitionByDate: CURRENT_DATE()
-  render_template_as_native_obj: True
   tasks:
     compute_supplier_lead_time:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
