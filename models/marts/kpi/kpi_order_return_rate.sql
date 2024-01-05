@@ -43,18 +43,4 @@ final as (
     {{ write_groupBY_groupByColumns_by_vars_from_table('grouped_filtered_sales') }}
 )
 
---final as (
---    select
---        (select number_of_returned_sales from grouped_returned_sales) as number_of_returned_sales,
---        (select number_of_sales from grouped_filtered_sales) as number_of_sales,
---        (number_of_returned_sales/number_of_sales)*100 as order_return_rate
---)
-
---final as (
---    select
---        ((select count(*) from returned_sales) /
---        (select count(*) from filtered_sales)) * 100
---        as order_return_rate
---)
-
 select * from final
