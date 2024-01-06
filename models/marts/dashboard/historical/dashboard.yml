@@ -1,13 +1,13 @@
 version: 2
 
 models:
-  - name: registry_sales_time
+  - name: sales_time
     description: Historicized table that describes the time required to process and deliver orders.
-  - name: registry_volume_orders
+  - name: volume_orders
     description: Historicized table about orders' volume.
-  - name: registry_volume_sales
+  - name: volume_sales
     description: Historicized table about sales' volume.
-  - name: registry_acquired_customer
+  - name: acquired_customer
     description: Historicized table about customers who start to do business with you over a specific time period.
-  - name: registry_lost_customer
+  - name: lost_customer
     description: Historicized table about customers who stop doing business with you over a specific time period.

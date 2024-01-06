@@ -1,4 +1,4 @@
-registry_dim_customer:
+dim_customer:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-12-20
@@ -40,15 +40,15 @@ registry_dim_customer:
       models: 'registry_stg_customer'
       trigger_rule: 'none_failed'
       dependencies: [ dbt_run_registry_stg_customer, dbt_run_registry_stg_customer_full_refresh ]
-    dbt_run_registry_dim_customer:
+    dbt_run_dim_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_dim_customer'
+      models: 'dim_customer'
       dependencies: [ dbt_test_registry_stg_customer ]
-    dbt_test_registry_dim_customer:
+    dbt_test_dim_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_dim_customer'
-      dependencies: [ dbt_run_registry_dim_customer ]
-registry_dim_supplier:
+      models: 'dim_customer'
+      dependencies: [ dbt_run_dim_customer ]
+dim_supplier:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-12-20
@@ -90,11 +90,11 @@ registry_dim_supplier:
       models: 'registry_stg_supplier'
       trigger_rule: 'none_failed'
       dependencies: [ dbt_run_registry_stg_supplier, dbt_run_registry_stg_supplier_full_refresh ]
-    dbt_run_registry_dim_supplier:
+    dbt_run_dim_supplier:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_dim_supplier'
+      models: 'dim_supplier'
       dependencies: [ dbt_test_registry_stg_supplier ]
-    dbt_test_registry_dim_supplier:
+    dbt_test_dim_supplier:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_dim_supplier'
-      dependencies: [ dbt_run_registry_dim_supplier ]
+      models: 'dim_supplier'
+      dependencies: [ dbt_run_dim_supplier ]

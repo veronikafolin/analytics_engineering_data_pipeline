@@ -1,4 +1,4 @@
-registry_volume_orders:
+volume_orders:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-12-20
@@ -15,9 +15,9 @@ registry_volume_orders:
   tasks:
     dbt_run_volume_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_volume_orders'
+      models: 'volume_orders'
       vars: {'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-registry_volume_sales:
+volume_sales:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2024-01-03
@@ -34,9 +34,9 @@ registry_volume_sales:
   tasks:
     dbt_run_volume_sales:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_volume_sales'
+      models: 'volume_sales'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-registry_sales_time:
+sales_time:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2024-01-03
@@ -53,9 +53,9 @@ registry_sales_time:
   tasks:
     dbt_run_sales_time:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_sales_time'
+      models: 'sales_time'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-registry_acquired_customer:
+acquired_customer:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2024-01-03
@@ -72,11 +72,11 @@ registry_acquired_customer:
       partitionByDate: CURRENT_DATE()
   render_template_as_native_obj: True
   tasks:
-    dbt_run_sales_time:
+    dbt_run_acquired_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_acquired_customer'
+      models: 'acquired_customer'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'startPeriod': "{{ params.startPeriod }}", 'endPeriod': "{{ params.endPeriod }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-registry_lost_customer:
+lost_customer:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2024-01-03
@@ -93,7 +93,7 @@ registry_lost_customer:
       partitionByDate: CURRENT_DATE()
   render_template_as_native_obj: True
   tasks:
-    dbt_run_sales_time:
+    dbt_run_lost_customer:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_lost_customer'
+      models: 'lost_customer'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'startPeriod': "{{ params.startPeriod }}", 'endPeriod': "{{ params.endPeriod }}", 'partitionByDate': "{{ params.partitionByDate }}" }

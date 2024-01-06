@@ -8,8 +8,8 @@ with
 
 part as (
     select *
-    from {{ref('registry_dim_part')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_part')}})
+    from {{ref('dim_part')}}
+    where partition_date = (select MAX(partition_date) from {{ref('dim_part')}})
 ),
 
 partsupp as (

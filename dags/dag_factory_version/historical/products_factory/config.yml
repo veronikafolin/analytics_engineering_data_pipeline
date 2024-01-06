@@ -1,4 +1,4 @@
-registry_dim_part:
+dim_part:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-12-20
@@ -40,15 +40,15 @@ registry_dim_part:
       models: 'registry_stg_part'
       trigger_rule: 'none_failed'
       dependencies: [ dbt_run_registry_stg_part, dbt_run_registry_stg_part_full_refresh ]
-    dbt_run_registry_dim_part:
+    dbt_run_dim_part:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_dim_part'
+      models: 'dim_part'
       dependencies: [ dbt_test_registry_stg_part ]
-    dbt_test_registry_dim_part:
+    dbt_test_dim_part:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_dim_part'
-      dependencies: [ dbt_run_registry_dim_part ]
-registry_fct_inventory:
+      models: 'dim_part'
+      dependencies: [ dbt_run_dim_part ]
+fct_inventory:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-12-20
@@ -90,11 +90,11 @@ registry_fct_inventory:
       models: 'registry_stg_partsupp'
       trigger_rule: 'none_failed'
       dependencies: [ dbt_run_registry_stg_partsupp, dbt_run_registry_stg_partsupp_full_refresh ]
-    dbt_run_registry_fct_inventory:
+    dbt_run_fct_inventory:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_fct_inventory'
+      models: 'fct_inventory'
       dependencies: [ dbt_test_registry_stg_partsupp ]
-    dbt_test_registry_fct_inventory:
+    dbt_test_fct_inventory:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_fct_inventory'
-      dependencies: [ dbt_run_registry_fct_inventory ]
+      models: 'fct_inventory'
+      dependencies: [ dbt_run_fct_inventory ]

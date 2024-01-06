@@ -2,7 +2,7 @@ with
 
 orders as (
     select *
-    from {{ref('registry_fct_orders')}}
+    from {{ref('fct_orders')}}
     {{ apply_partition_date() }}
 ),
 

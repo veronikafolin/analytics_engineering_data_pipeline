@@ -14,8 +14,8 @@ orders as (
 
 customer as (
     select *
-    from {{ref('registry_dim_customer')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_customer')}})
+    from {{ref('dim_customer')}}
+    where partition_date = (select MAX(partition_date) from {{ref('dim_customer')}})
 ),
 
 final as (

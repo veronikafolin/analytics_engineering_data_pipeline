@@ -1,12 +1,12 @@
 with
 
 sales as (
-    select * from {{ref('registry_fct_sales')}}
+    select * from {{ref('fct_sales')}}
     {{ apply_partition_date() }}
 ),
 
 inventory as (
-    select * from {{ref('registry_fct_inventory')}}
+    select * from {{ref('fct_inventory')}}
     {{ apply_partition_date() }}
 ),
 

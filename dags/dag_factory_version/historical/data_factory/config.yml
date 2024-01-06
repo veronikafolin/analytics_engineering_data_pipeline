@@ -1,4 +1,4 @@
-materialize_registries:
+materialize_data:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-01-03
@@ -13,44 +13,44 @@ materialize_registries:
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
-    trigger_registry_dim_part:
+    trigger_dim_part:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-      trigger_dag_id: 'registry_dim_part'
+      trigger_dag_id: 'dim_part'
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
-    trigger_registry_dim_customer:
+    trigger_dim_customer:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-      trigger_dag_id: 'registry_dim_customer'
-      wait_for_completion: True
-      deferrable: True
-      failed_states: [ 'failed' ]
-      dependencies: [ trigger_int_nation ]
-    trigger_registry_dim_supplier:
-      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-      trigger_dag_id: 'registry_dim_supplier'
+      trigger_dag_id: 'dim_customer'
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
       dependencies: [ trigger_int_nation ]
-    trigger_registry_fct_inventory:
+    trigger_dim_supplier:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-      trigger_dag_id: 'registry_fct_inventory'
+      trigger_dag_id: 'dim_supplier'
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
-      dependencies: [ trigger_registry_dim_supplier, trigger_registry_dim_part ]
-    trigger_registry_fct_orders:
+      dependencies: [ trigger_int_nation ]
+    trigger_fct_inventory:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-      trigger_dag_id: 'registry_fct_orders'
+      trigger_dag_id: 'fct_inventory'
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
-      dependencies: [ trigger_registry_dim_customer ]
-    trigger_registry_fct_sales:
+      dependencies: [ trigger_dim_supplier, trigger_dim_part ]
+    trigger_fct_orders:
       operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
-      trigger_dag_id: 'registry_fct_sales'
+      trigger_dag_id: 'fct_orders'
       wait_for_completion: True
       deferrable: True
       failed_states: [ 'failed' ]
-      dependencies: [ trigger_registry_fct_orders, trigger_registry_fct_inventory ]
+      dependencies: [ trigger_dim_customer ]
+    trigger_fct_sales:
+      operator: airflow.operators.trigger_dagrun.TriggerDagRunOperator
+      trigger_dag_id: 'fct_sales'
+      wait_for_completion: True
+      deferrable: True
+      failed_states: [ 'failed' ]
+      dependencies: [ trigger_fct_orders, trigger_fct_inventory ]

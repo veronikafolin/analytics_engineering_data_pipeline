@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: registry_dim_part
+  - name: dim_part
     description: Historicized table of products' information.
     columns:
       - name: partition_date
@@ -12,7 +12,7 @@ models:
               max_value: "getdate()"
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: date
-  - name: registry_fct_inventory
+  - name: fct_inventory
     description: Historicized table of products' information, per suppliers.
     columns:
       - name: partition_date

@@ -14,14 +14,14 @@ lineitem as (
 
 orders as (
     select *
-    from {{ref('registry_fct_orders')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_fct_orders')}})
+    from {{ref('fct_orders')}}
+    where partition_date = (select MAX(partition_date) from {{ref('fct_orders')}})
 ),
 
 supplier as (
     select *
-    from {{ref('registry_dim_supplier')}}
-    where partition_date = (select MAX(partition_date) from {{ref('registry_dim_supplier')}})
+    from {{ref('dim_supplier')}}
+    where partition_date = (select MAX(partition_date) from {{ref('dim_supplier')}})
 ),
 
 final as (

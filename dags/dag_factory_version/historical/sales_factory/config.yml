@@ -1,4 +1,4 @@
-registry_fct_orders:
+fct_orders:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-12-20
@@ -40,15 +40,15 @@ registry_fct_orders:
       models: 'registry_stg_orders'
       trigger_rule: 'none_failed'
       dependencies: [ dbt_run_registry_stg_orders, dbt_run_registry_stg_orders_full_refresh ]
-    dbt_run_registry_fct_orders:
+    dbt_run_fct_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_fct_orders'
+      models: 'fct_orders'
       dependencies: [ dbt_test_registry_stg_orders ]
-    dbt_test_registry_fct_orders:
+    dbt_test_fct_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_fct_orders'
-      dependencies: [ dbt_run_registry_fct_orders ]
-registry_fct_sales:
+      models: 'fct_orders'
+      dependencies: [ dbt_run_fct_orders ]
+fct_sales:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-12-20
@@ -90,11 +90,11 @@ registry_fct_sales:
       models: 'registry_stg_lineitem'
       trigger_rule: 'none_failed'
       dependencies: [ dbt_run_registry_stg_lineitem, dbt_run_registry_stg_lineitem_full_refresh ]
-    dbt_run_registry_fct_sales:
+    dbt_run_fct_sales:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'registry_fct_sales'
+      models: 'fct_sales'
       dependencies: [ dbt_test_registry_stg_lineitem ]
-    dbt_test_registry_fct_sales:
+    dbt_test_fct_sales:
       operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_fct_sales'
-      dependencies: [ dbt_run_registry_fct_sales ]
+      models: 'fct_sales'
+      dependencies: [ dbt_run_fct_sales ]
