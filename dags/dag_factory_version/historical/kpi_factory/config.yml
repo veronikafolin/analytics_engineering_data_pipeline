@@ -75,12 +75,6 @@ kpi_sales:
           FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_GROSS_PROFIT_MARGIN
           WHERE PROFIT < (REVENUE*0.1));
       dependencies: [ compute_gross_profit_margin ]
-    compute_customer_segmentation:
-      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'kpi_customer_segmentation'
-      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-      trigger_rule: 'all_done'
-      dependencies: [ compute_gross_profit_margin ]
 kpi_orders:
   default_args:
     owner: 'v.folin@reply.it'
@@ -95,8 +89,6 @@ kpi_orders:
   params:
     groupBy: [ ]
     filters: [ ]
-    startPeriod: '1994-01-01'
-    endPeriod: '1994-12-31'
     partitionByDate: CURRENT_DATE()
   render_template_as_native_obj: True
   tasks:
@@ -126,3 +118,32 @@ kpi_orders:
           FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_ACCURACY_RATE
           WHERE ORDER_ACCURACY_RATE > 50 );
       dependencies: [ compute_order_accuracy_rate ]
+kpi_customers:
+  default_args:
+    owner: 'v.folin@reply.it'
+    email: [ 'v.folin@reply.it' ]
+    email_on_failure: True
+    start_date: 2023-12-28
+    retries: 0
+    snowflake_conn_id: snowflake
+  schedule_interval: None
+  dagrun_timeout_sec: 3600
+  description: "To compute and check KPIs on customers"
+  params:
+    groupBy: [ ]
+    filters: [ ]
+    startPeriod: '1994-01-01'
+    endPeriod: '1994-12-31'
+    partitionByDate: CURRENT_DATE()
+  render_template_as_native_obj: True
+  tasks:
+    compute_customer_segmentation:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_customer_segmentation'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
+    compute_customer_retention_rate:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_customer_retention_rate'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}",
+          'startPeriod': "{{ params.startPeriod }}", 'endPeriod': "{{ params.endPeriod }}"}
+      dependencies: [ compute_customer_segmentation ]
