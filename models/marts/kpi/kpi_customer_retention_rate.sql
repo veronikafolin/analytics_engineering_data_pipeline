@@ -42,7 +42,7 @@ customer_retention_rate as (
 final as (
     select
         {{ write_select_groupByColumns_by_vars() }}
-        CAST(avg(customer_retention_rate) AS DECIMAL(10,2)) as customer_retention_rate
+        avg(customer_retention_rate) as customer_retention_rate
     from customer_retention_rate
     {{ write_groupBY_groupByColumns_by_vars() }}
 )

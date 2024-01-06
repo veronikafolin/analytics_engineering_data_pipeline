@@ -146,4 +146,5 @@ kpi_customers:
       models: 'kpi_customer_retention_rate'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}",
           'startPeriod': "{{ params.startPeriod }}", 'endPeriod': "{{ params.endPeriod }}"}
+      trigger_rule: 'all_done'
       dependencies: [ compute_customer_segmentation ]
