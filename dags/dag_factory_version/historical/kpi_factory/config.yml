@@ -104,8 +104,6 @@ kpi_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_revenue'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-      trigger_rule: 'all_done'
-      dependencies: [ compute_supplier_lead_time ]
     check_revenue:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
