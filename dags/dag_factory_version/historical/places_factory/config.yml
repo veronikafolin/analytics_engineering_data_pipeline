@@ -23,6 +23,9 @@ int_nation:
       provide_context: True
       trigger_rule: 'all_done'
       dependencies: [ check_int_nation_existence ]
+    nothing_to_do:
+      operator: airflow.operators.dummy.DummyOperator
+      dependencies: [ branch_on_int_nation_existence ]
     dbt_run_stg_region:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_region'
