@@ -5,11 +5,6 @@ orders as (
     {{ apply_partition_date() }}
 ),
 
-customers as (
-    select * from {{ref('registry_dim_customer')}}
-    {{ apply_partition_date() }}
-),
-
 orders_filtered as (
     select *
     from orders
@@ -26,7 +21,7 @@ grouped_customers_beginning_of_period as (
     select
         {{ write_select_groupByColumns_by_vars() }}
         count(distinct custkey) as customers_beginning_of_period
-    from customers_beginning_of_period left join customers using (custkey)
+    from customers_beginning_of_period left join orders_filtered using (custkey)
     {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
@@ -40,7 +35,7 @@ grouped_customers_end_of_period as (
     select
         {{ write_select_groupByColumns_by_vars() }}
         count(distinct custkey) as customers_end_of_period
-    from customers_end_of_period left join customers using (custkey)
+    from customers_end_of_period left join orders_filtered using (custkey)
     {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
@@ -54,7 +49,7 @@ grouped_acquired_customers as (
     select
         {{ write_select_groupByColumns_by_vars() }}
         count(distinct custkey) as acquired_customers
-    from acquired_customers left join customers using (custkey)
+    from acquired_customers left join orders_filtered using (custkey)
     {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
