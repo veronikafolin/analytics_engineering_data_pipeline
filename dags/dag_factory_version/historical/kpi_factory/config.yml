@@ -156,3 +156,18 @@ kpi_customers:
           FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_CUSTOMER_RETENTION_RATE
           WHERE CUSTOMER_RETENTION_RATE < 50 );
       dependencies: [ compute_customer_retention_rate ]
+    compute_customer_churn_rate:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'kpi_customer_churn_rate'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}",
+              'startPeriod': "{{ params.startPeriod }}", 'endPeriod': "{{ params.endPeriod }}" }
+      trigger_rule: 'all_done'
+      dependencies: [ compute_customer_retention_rate ]
+    check_customer_churn_rate:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT NOT EXISTS (
+          SELECT *
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_CUSTOMER_CHURN_RATE
+          WHERE CUSTOMER_CHURN_RATE > 20 );
+      dependencies: [ compute_customer_churn_rate ]
