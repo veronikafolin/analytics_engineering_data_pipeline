@@ -1,30 +1,27 @@
-{% set startPeriod = var("startPeriod") %}
-{% set endPeriod = var("endPeriod") %}
-
 with
 
-sales as (
+orders as (
     select *
-    from {{ref('registry_fct_sales')}}
+    from {{ref('registry_fct_orders')}}
     {{ apply_partition_date() }}
 ),
 
-filtered_sales as (
+orders_filtered as (
     select *
-    from sales
+    from orders
     {{ write_where_by_vars() }}
 ),
 
 customers_beginning_of_period as (
     select distinct custkey
-    from filtered_sales
-    where orderdate <= '{{startPeriod}}'
+    from orders_filtered
+    where orderdate <= '{{var("startPeriod")}}'
 ),
 
 customers_end_of_period as (
     select distinct custkey
-    from filtered_sales
-    where orderdate >= '{{startPeriod}}' and orderdate <= '{{endPeriod}}'
+    from orders_filtered
+    where orderdate >= '{{var("startPeriod")}}' and orderdate <= '{{var("endPeriod")}}'
 ),
 
 acquired_customers as (
@@ -36,9 +33,9 @@ acquired_customers as (
 final as (
     select
         {{ write_select_groupByColumns_by_vars() }}
-        count(custkey) as count_of_acquired_customers
+        count(distinct custkey) as count_of_acquired_customers
     from acquired_customers
-    join filtered_sales using(custkey)
+    join orders_filtered using(custkey)
     {{ write_groupBY_groupByColumns_by_vars() }}
 )
 
