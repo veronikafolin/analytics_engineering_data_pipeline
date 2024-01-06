@@ -5,6 +5,11 @@ orders as (
     {{ apply_partition_date() }}
 ),
 
+customers as (
+    select * from {{ref('registry_dim_customer')}}
+    {{ apply_partition_date() }}
+),
+
 orders_filtered as (
     select *
     from orders
@@ -17,10 +22,26 @@ customers_beginning_of_period as (
     where orderdate <= '{{var("startPeriod")}}'
 ),
 
+grouped_customers_beginning_of_period as (
+    select
+        {{ write_select_groupByColumns_by_vars() }}
+        count(distinct custkey) as customers_beginning_of_period
+    from customers_beginning_of_period left join customers using (custkey)
+    {{ write_groupBY_groupByColumns_by_vars() }}
+),
+
 customers_end_of_period as (
     select distinct custkey
     from orders_filtered
     where orderdate >= '{{var("startPeriod")}}' and orderdate <= '{{var("endPeriod")}}'
+),
+
+grouped_customers_end_of_period as (
+    select
+        {{ write_select_groupByColumns_by_vars() }}
+        count(distinct custkey) as customers_end_of_period
+    from customers_end_of_period left join customers using (custkey)
+    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 acquired_customers as (
@@ -29,22 +50,26 @@ acquired_customers as (
     select * from customers_beginning_of_period
 ),
 
-customer_retention_rate as (
+grouped_acquired_customers as (
     select
         {{ write_select_groupByColumns_by_vars() }}
-        (((select count(*) from customers_end_of_period) -
-        (select count(*) from acquired_customers)) /
-        (select count(*) from customers_beginning_of_period)) * 100
-        as customer_retention_rate
-    from orders_filtered
+        count(distinct custkey) as acquired_customers
+    from acquired_customers left join customers using (custkey)
+    {{ write_groupBY_groupByColumns_by_vars() }}
 ),
 
 final as (
     select
-        {{ write_select_groupByColumns_by_vars() }}
-        avg(customer_retention_rate) as customer_retention_rate
-    from customer_retention_rate
-    {{ write_groupBY_groupByColumns_by_vars() }}
+        {{ write_select_groupByColumns_by_vars_from_table('grouped_acquired_customers') }}
+        CAST(avg(grouped_customers_beginning_of_period.customers_beginning_of_period) AS INT) as customers_beginning_of_period,
+        CAST(avg(grouped_customers_end_of_period.customers_end_of_period) AS INT) as customers_end_of_period,
+        CAST(avg(grouped_acquired_customers.acquired_customers) AS INT) as acquired_customers,
+        CAST(avg((customers_end_of_period - acquired_customers)/customers_beginning_of_period) * 100  AS DECIMAL(10,2))
+        as customer_retention_rate
+    from grouped_customers_beginning_of_period
+    join grouped_customers_end_of_period
+    join grouped_acquired_customers
+    {{ write_groupBY_groupByColumns_by_vars_from_table('grouped_acquired_customers') }}
 )
 
 select * from final

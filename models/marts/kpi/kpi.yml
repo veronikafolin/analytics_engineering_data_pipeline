@@ -6,7 +6,7 @@ models:
   - name: kpi_customer_churn_rate
     description: The percentage of customers who stop doing business with you over a specific time period.
   - name: kpi_customer_retention_rate
-    description: The percentage of customers who start to do business with you over a specific time period.
+    description: The percentage of consumers who remain at the end of a given period of time.
   - name: kpi_sales_fulfillment_time
     description: The average time it takes to process and deliver items.
   - name: kpi_gross_profit_margin

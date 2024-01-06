@@ -148,3 +148,11 @@ kpi_customers:
           'startPeriod': "{{ params.startPeriod }}", 'endPeriod': "{{ params.endPeriod }}"}
       trigger_rule: 'all_done'
       dependencies: [ compute_customer_segmentation ]
+    check_customer_retention_rate:
+      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
+      sql: |
+        SELECT NOT EXISTS (
+          SELECT *
+          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_CUSTOMER_RETENTION_RATE
+          WHERE CUSTOMER_RETENTION_RATE < 50 );
+      dependencies: [ compute_customer_retention_rate ]
