@@ -2,5 +2,8 @@ version: 2
 
 models:
   - name: fct_test_results
+    description: Joined information about tests metadata and tests results
   - name: monitor_dataquality
+    description: Summarized information regarding the execution of the tests
   - name: metadata
+    description: Metadata about tables on which tests was performed

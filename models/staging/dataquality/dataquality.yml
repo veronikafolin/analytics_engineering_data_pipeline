@@ -2,4 +2,6 @@ version: 2
 
 models:
   - name: stg_dbt_tests
+    description: General metadata on the tests performed
   - name: stg_elementary_test_results
+    description: Information on the execution of the tests performed
