@@ -12,6 +12,10 @@ test_tags as (
     select * from {{ref('test_tags')}}
 ),
 
+metadata as (
+    select * from {{ref('metadata')}}
+),
+
 final as (
     select
         test_results.TEST_UNIQUE_ID,
@@ -32,10 +36,12 @@ final as (
         test_results.STATUS,
         test_results.FAILURES,
         test_results.RESULT_ROWS,
+        metadata.ROW_COUNT,
         test_results.FAILED_ROW_COUNT
     from test_results
     join tests on (test_results.TEST_UNIQUE_ID = tests.UNIQUE_ID)
     join test_tags on (tests.TEST_SHORT_NAME = test_tags.TEST_NAME)
+    join metadata on (test_results.TABLE_NAME = metadata.TABLE_NAME)
 )
 
 select * from final

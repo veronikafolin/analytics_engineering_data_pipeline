@@ -19,3 +19,9 @@ sources:
     tables:
       - name: dbt_tests
       - name: elementary_test_results
+  - name: metadata
+    database: snowflake
+    schema: account_usage
+    tables:
+      - name: tables
+      - name: views

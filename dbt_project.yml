@@ -51,6 +51,7 @@ models:
       dataquality:
         +tags: "DATA_QUALITY"
     staging:
+      +materialized: table
       sales:
         +tags: "SALES"
       products:

@@ -3,3 +3,4 @@ version: 2
 models:
   - name: fct_test_results
   - name: monitor_dataquality
+  - name: metadata
