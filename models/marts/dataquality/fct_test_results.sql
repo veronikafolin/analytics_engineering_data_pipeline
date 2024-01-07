@@ -13,7 +13,7 @@ test_tags as (
 ),
 
 metadata as (
-    select * from {{ref('metadata')}}
+    select * from {{ref('metadata_test')}}
 ),
 
 final as (

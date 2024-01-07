@@ -13,7 +13,7 @@ dataquality:
       select: 'test_tags'
     dbt_run_metadata:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'metadata'
+      models: 'metadata_test'
     dbt_run_stg_dbt_tests:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_dbt_tests'
