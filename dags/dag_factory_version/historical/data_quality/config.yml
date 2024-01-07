@@ -10,7 +10,6 @@ dataquality:
   params:
     groupBy: [ ]
     filters: [ ]
-    partitionByDate: CURRENT_DATE()
   render_template_as_native_obj: True
   tasks:
     dbt_seed:
