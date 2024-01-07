@@ -1,0 +1,31 @@
+dataquality:
+  default_args:
+    owner: 'v.folin@reply.it'
+    start_date: 2023-01-07
+    retries: 1
+    retry_delay_sec: 60
+  schedule_interval: None
+  dagrun_timeout_sec: 3600
+  description: "To materialize tables to monitor data quality tests"
+  tasks:
+    dbt_seed:
+      operator: airflow_dbt.operators.dbt_operator.DbtSeedOperator
+      select: 'test_tags'
+    dbt_run_stg_dbt_tests:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'stg_dbt_tests'
+      dependencies: [dbt_seed]
+    dbt_run_stg_elementary_test_results:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'stg_elementary_test_results'
+      dependencies: [ dbt_seed ]
+    dbt_run_fct_test_results:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'fct_test_results'
+      dependencies: [ dbt_run_stg_dbt_tests, dbt_run_stg_elementary_test_results ]
+    dbt_run_monitor_dataquality:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      models: 'monitor_dataquality'
+      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}" }
+      dependencies: [dbt_run_fct_test_results]
+
