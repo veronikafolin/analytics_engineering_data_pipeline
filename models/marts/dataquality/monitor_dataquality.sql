@@ -7,11 +7,13 @@ test_results as (
 final as (
     select
         {{ write_select_groupByColumns_by_vars() }}
-        count(distinct TEST_UNIQUE_ID) as distinct_number_of_tests,
-        count(TEST_SHORT_NAME) as number_of_test_runs,
-        sum(FAILURES) as sum_of_failures,
-        sum(ROW_COUNT) as sum_of_row_count,
-        sum(FAILED_ROW_COUNT) as sum_of_failed_row_count
+        count(distinct TEST_UNIQUE_ID) as test_count,
+        count(TEST_SHORT_NAME) as test_runs,
+        sum(FAILURES) as failures_count,
+        sum(ROW_COUNT) as row_count,
+        sum(FAILED_ROW_COUNT) as failed_row_count,
+        count(distinct COLUMN_REF) as points_of_control,
+        CAST(avg(1 - (FAILED_ROW_COUNT/ROW_COUNT)) AS DECIMAL(10,2)) as quality_score
     from test_results
     {{ write_where_by_vars() }}
     {{ write_groupBY_groupByColumns_by_vars() }}

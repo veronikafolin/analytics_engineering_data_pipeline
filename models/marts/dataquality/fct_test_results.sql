@@ -25,6 +25,7 @@ final as (
         test_results.SCHEMA_NAME,
         test_results.TABLE_NAME,
         test_results.COLUMN_NAME,
+        test_results.COLUMN_REF,
         tests.TEST_OWNERS,
         test_tags.TEST_TAG,
         tests.MODEL_OWNERS,
@@ -39,9 +40,9 @@ final as (
         metadata.ROW_COUNT,
         test_results.FAILED_ROW_COUNT
     from test_results
-    join tests on (test_results.TEST_UNIQUE_ID = tests.UNIQUE_ID)
-    join test_tags on (tests.TEST_SHORT_NAME = test_tags.TEST_NAME)
-    join metadata on (test_results.TABLE_NAME = metadata.TABLE_NAME)
+    left join tests on (test_results.TEST_UNIQUE_ID = tests.UNIQUE_ID)
+    left join test_tags on (tests.TEST_SHORT_NAME = test_tags.TEST_NAME)
+    right join metadata on (test_results.TABLE_NAME = metadata.TABLE_NAME)
 )
 
 select * from final
