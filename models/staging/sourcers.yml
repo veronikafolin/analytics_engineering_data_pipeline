@@ -20,8 +20,8 @@ sources:
       - name: dbt_tests
       - name: elementary_test_results
   - name: metadata
-    database: snowflake
-    schema: account_usage
+    database: analytics
+    schema: information_schema
     tables:
       - name: tables
       - name: views
