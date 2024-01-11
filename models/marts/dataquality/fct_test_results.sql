@@ -12,6 +12,10 @@ test_tags as (
     select * from {{ref('test_tags')}}
 ),
 
+model_tags as (
+    select * from {{ref('model_tags')}}
+),
+
 metadata as (
     select * from {{ref('metadata_test')}}
 ),
@@ -25,11 +29,12 @@ final as (
         test_results.SCHEMA_NAME,
         test_results.TABLE_NAME,
         test_results.COLUMN_NAME,
+        test_results.TABLE_REF,
         test_results.COLUMN_REF,
         tests.TEST_OWNERS,
         test_tags.TEST_TAG,
         tests.MODEL_OWNERS,
-        tests.MODEL_TAGS,
+        model_tags.MODEL_TAG,
         tests.DESCRIPTION,
 	    tests.ORIGINAL_PATH,
 	    tests.GENERATED_AT,
@@ -42,7 +47,8 @@ final as (
     from test_results
     left join tests on (test_results.TEST_UNIQUE_ID = tests.UNIQUE_ID)
     left join test_tags on (tests.TEST_SHORT_NAME = test_tags.TEST_NAME)
-    right join metadata on (test_results.TABLE_NAME = metadata.TABLE_NAME)
+    left join model_tags on (test_results.TABLE_REF = model_tags.TABLE_REF)
+    left join metadata on (test_results.TABLE_NAME = metadata.TABLE_NAME)
 )
 
 select * from final

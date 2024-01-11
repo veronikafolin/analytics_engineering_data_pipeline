@@ -5,3 +5,5 @@ models:
     description: General metadata on the tests performed
   - name: stg_elementary_test_results
     description: Information on the execution of the tests performed
+  - name: metadata_test
+    description: Metadata about tables on which tests was performed

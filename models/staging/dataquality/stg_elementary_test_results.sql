@@ -6,6 +6,7 @@ select
 	SCHEMA_NAME,
 	TABLE_NAME,
 	NVL(COLUMN_NAME, 'combination_of_columns') as COLUMN_NAME,
+	DATABASE_NAME || '.' || SCHEMA_NAME || '.' || TABLE_NAME  AS TABLE_REF,
 	DATABASE_NAME || '.' || SCHEMA_NAME || '.' || TABLE_NAME || '.' || NVL(COLUMN_NAME, 'combination_of_columns')  AS COLUMN_REF,
 	TEST_RESULTS_QUERY,
 	STATUS,

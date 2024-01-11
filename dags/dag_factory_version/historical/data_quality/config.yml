@@ -12,27 +12,27 @@ dataquality:
     filters: [ ]
   render_template_as_native_obj: True
   tasks:
-    dbt_seed:
+    dbt_seed_test_tags:
       operator: airflow_dbt.operators.dbt_operator.DbtSeedOperator
       select: 'test_tags'
+    dbt_seed_model_tags:
+      operator: airflow_dbt.operators.dbt_operator.DbtSeedOperator
+      select: 'model_tags'
     dbt_run_metadata:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'metadata_test'
     dbt_run_stg_dbt_tests:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_dbt_tests'
-      dependencies: [dbt_seed]
     dbt_run_stg_elementary_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_elementary_test_results'
-      dependencies: [ dbt_seed ]
     dbt_run_fct_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'fct_test_results'
-      dependencies: [ dbt_run_stg_dbt_tests, dbt_run_stg_elementary_test_results, dbt_run_metadata ]
+      dependencies: [ dbt_seed_test_tags, dbt_seed_model_tags, dbt_run_stg_dbt_tests, dbt_run_stg_elementary_test_results, dbt_run_metadata ]
     dbt_run_monitor_dataquality:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'monitor_dataquality'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}" }
       dependencies: [dbt_run_fct_test_results]
-
