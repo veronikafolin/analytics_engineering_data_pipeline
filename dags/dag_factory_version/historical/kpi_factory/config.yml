@@ -73,7 +73,7 @@ kpi_sales:
         SELECT NOT EXISTS (
           SELECT *
           FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_GROSS_PROFIT_MARGIN
-          WHERE PROFIT < (REVENUE*0.1));
+          WHERE PROFIT < (NET_REVENUE*0.1));
       dependencies: [ compute_gross_profit_margin ]
 kpi_orders:
   default_args:
@@ -92,24 +92,10 @@ kpi_orders:
     partitionByDate: CURRENT_DATE()
   render_template_as_native_obj: True
   tasks:
-    compute_revenue:
-      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'kpi_revenue'
-      vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-    check_revenue:
-      operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
-      sql: |
-        SELECT NOT EXISTS (
-          SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_REVENUE
-          WHERE AVG_REVENUE < 150000 );
-      dependencies: [ compute_revenue ]
     compute_order_accuracy_rate:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'kpi_order_accuracy_rate'
       vars: { 'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
-      trigger_rule: 'all_done'
-      dependencies: [ compute_revenue ]
     check_order_accuracy_rate:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |

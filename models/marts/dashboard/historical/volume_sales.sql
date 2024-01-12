@@ -6,25 +6,21 @@ sales as (
     {{ apply_partition_date() }}
 ),
 
-inventory as (
-    select *
-    from {{ref('fct_inventory')}}
-    {{ apply_partition_date() }}
-),
-
 final as (
     select
         {{ write_select_groupByColumns_by_vars() }}
         min(orderdate) as first_order_date,
         max(orderdate) as most_recent_order_date,
         count(lineitemkey) as number_of_sales,
+        count(distinct orderkey) as number_of_orders,
+        count(distinct custkey) as number_of_customers,
         sum(quantity) as sum_of_quantity,
-        sum(extendedprice) as sum_extendedprice,
-        sum(discounted_extended_price) as sum_discounted_extended_price,
-        sum( {{ compute_cost_of_good_sold(supplycost, quantity) }} ) as sum_cost_of_good_sold,
-        sum( {{ compute_profit(discounted_extended_price, supplycost, quantity) }} ) as sum_profit
+        CAST(sum(extendedprice) AS INT) as sum_extendedprice,
+        CAST(sum(net_revenue) AS INT) as sum_net_revenue,
+        CAST(sum(gross_revenue) AS INT) as sum_gross_revenue,
+        CAST(sum(cost_of_good_sold) AS INT) as sum_cost_of_good_sold,
+        CAST(sum(profit) AS INT) as sum_profit
     from sales
-    join inventory using(partsuppkey)
     {{ write_where_by_vars() }}
     {{ write_groupBY_groupByColumns_by_vars() }}
 )

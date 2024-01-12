@@ -1,22 +1,3 @@
-volume_orders:
-  default_args:
-    owner: 'v.folin@reply.it'
-    start_date: 2023-12-20
-    retries: 1
-    retry_delay_sec: 60
-  schedule_interval: None
-  dagrun_timeout_sec: 3600
-  description: 'To materialize historicized volume_orders dashboard'
-  params:
-      groupBy: []
-      filters: []
-      partitionByDate: CURRENT_DATE()
-  render_template_as_native_obj: True
-  tasks:
-    dbt_run_volume_orders:
-      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
-      models: 'volume_orders'
-      vars: {'groupBy': "{{ params.groupBy }}", 'filters': "{{ params.filters }}", 'partitionByDate': "{{ params.partitionByDate }}" }
 volume_sales:
   default_args:
     owner: 'v.folin@reply.it'

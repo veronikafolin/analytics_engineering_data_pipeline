@@ -1,3 +1,3 @@
-{% macro compute_profit(discounted_extended_price, supplycost, quantity) %}
-    discounted_extended_price - (supplycost * quantity)
+{% macro compute_profit(net_revenue, supplycost, quantity) %}
+    net_revenue - (supplycost * quantity)
 {% endmacro %}
