@@ -15,14 +15,18 @@ models:
   - name: fct_sales
     description: Historicized table for sales' information.
     columns:
-      - name: discounted_extended_price
+      - name: net_revenue
         tests:
          - dbt_utils.accepted_range:
              min_value: 0
-      - name: discounted_extended_price_plus_tax
+      - name: gross_revenue
         tests:
          - dbt_utils.accepted_range:
              min_value: 0
+      - name: cost_of_good_sold
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
       - name: partition_date
         description: Time when this snapshot row was inserted.
         tests:

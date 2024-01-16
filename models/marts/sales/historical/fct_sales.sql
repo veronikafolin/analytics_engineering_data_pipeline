@@ -47,6 +47,7 @@ final as (
         supplier.supp_name,
         supplier.supp_nation_name,
         supplier.supp_region_name,
+        inventory.supplycost,
         lineitem.quantity,
         lineitem.extendedprice,
         lineitem.discount,
