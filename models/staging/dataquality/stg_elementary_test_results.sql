@@ -12,6 +12,8 @@ select
 	STATUS,
 	FAILURES,
 	RESULT_ROWS,
+	DETECTED_AT,
+    TO_DATE(DETECTED_AT) as DETECTED_AT_DATE,
 	COALESCE(FAILED_ROW_COUNT, 0) as FAILED_ROW_COUNT
 
 from {{ source('elementary', 'elementary_test_results') }}
