@@ -29,13 +29,13 @@ jobs:
       uses: 'google-github-actions/upload-cloud-storage@v1'
       with:
         path: 'dags'
-        destination: 'europe-west4-dbt-core-demo-5e9c7a27-bucket/'
+        destination: 'europe-west4-analytics-engi-de2cb24b-bucket/'
         gzip: false
 
     - id: 'synchronize-dbt-project'
       uses: 'google-github-actions/upload-cloud-storage@v1'
       with:
         path: '../'
-        destination: 'europe-west4-dbt-core-demo-5e9c7a27-bucket/data/analytics_engineering_data_pipeline'
+        destination: 'europe-west4-analytics-engi-de2cb24b-bucket/data/analytics_engineering_data_pipeline'
         process_gcloudignore: true
         gzip: false
