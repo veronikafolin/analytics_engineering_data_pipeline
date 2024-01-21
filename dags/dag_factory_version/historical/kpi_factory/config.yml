@@ -24,7 +24,7 @@ kpi_sales:
       sql: |
             SELECT NOT EXISTS (
               SELECT *
-              FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_SUPPLIER_LEAD_TIME
+              FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_SUPPLIER_LEAD_TIME
               WHERE AVG_DELIVERY_DAYS > 16 );
       dependencies: [ compute_supplier_lead_time ]
     compute_product_popularity:
@@ -44,7 +44,7 @@ kpi_sales:
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_SALES_RETURN_RATE
+          FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_SALES_RETURN_RATE
           WHERE SALES_RETURN_RATE > 25 );
       dependencies: [ compute_sales_return_rate ]
     compute_sales_fulfillment_time:
@@ -58,7 +58,7 @@ kpi_sales:
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_SALES_FULFILLMENT_TIME
+          FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_SALES_FULFILLMENT_TIME
           WHERE AVG_FULFILLMENT_DAYS > 80 );
       dependencies: [ compute_sales_fulfillment_time ]
     compute_gross_profit_margin:
@@ -72,7 +72,7 @@ kpi_sales:
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_GROSS_PROFIT_MARGIN
+          FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_GROSS_PROFIT_MARGIN
           WHERE PROFIT < (NET_REVENUE*0.1));
       dependencies: [ compute_gross_profit_margin ]
 kpi_orders:
@@ -101,7 +101,7 @@ kpi_orders:
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_ORDER_ACCURACY_RATE
+          FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_ORDER_ACCURACY_RATE
           WHERE ORDER_ACCURACY_RATE > 50 );
       dependencies: [ compute_order_accuracy_rate ]
 kpi_customers:
@@ -139,7 +139,7 @@ kpi_customers:
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_CUSTOMER_RETENTION_RATE
+          FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_CUSTOMER_RETENTION_RATE
           WHERE CUSTOMER_RETENTION_RATE < 50 );
       dependencies: [ compute_customer_retention_rate ]
     compute_customer_churn_rate:
@@ -154,6 +154,6 @@ kpi_customers:
       sql: |
         SELECT NOT EXISTS (
           SELECT *
-          FROM ANALYTICS.DBT_CORE_REUSABLE_DEMO.KPI_CUSTOMER_CHURN_RATE
+          FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_CUSTOMER_CHURN_RATE
           WHERE CUSTOMER_CHURN_RATE > 20 );
       dependencies: [ compute_customer_churn_rate ]
