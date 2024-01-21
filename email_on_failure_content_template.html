@@ -2,19 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Airflow Alert: Task {{task_name}} has failed</title>
+    <title>Airflow Alert: Task {{ ti.task_id }} has failed</title>
 </head>
 <body>
 
-Try {{try_number}} out of {{max_tries + 1}} <br><br>
+<div>
+    <b>Task ID:</b> {{ ti.task_id }} <br>
+    <b>Task execution date:</b> {{ ti.execution_date }} <br>
+    <b>Try:</b> {{try_number}} out of {{max_tries + 1}} <br>
+    <b>Exception: </b> <p style="background-color: #eee; border: 1px solid #999;display: block;padding: 20px;">{{exception_html}}</p> <br>
+    <b>Log: </b> <a href="{{ti.log_url}}">Link</a> <br>
+    <b>Host:</b> {{ti.hostname}} <br>
+    <b>Log file:</b> {{ti.log_filepath}}<br>
+    <b>Mark success:</b> <a href="{{ti.mark_success_url}}">Link</a>
+</div>
 
-<strong>Exception: </strong>> {{exception_html}} <br><br>
-
-<strong>Log: </strong> <a href="{{ti.log_url}}">Link</a> <br><br>
-
-<strong> Host: </strong> {{ti.hostname}} <br><br>
-
-<strong> Mark success: </strong> <a href="{{ti.mark_success_url}}">Link</a>
 
 </body>
 </html>
