@@ -102,7 +102,7 @@ kpi_orders:
         SELECT NOT EXISTS (
           SELECT *
           FROM ANALYTICS.ANALYTICS_ENGINEERING_DATA_PIPELINE.KPI_ORDER_ACCURACY_RATE
-          WHERE ORDER_ACCURACY_RATE > 40 );
+          WHERE ORDER_ACCURACY_RATE > 50 );
       dependencies: [ compute_order_accuracy_rate ]
 kpi_customers:
   default_args:
