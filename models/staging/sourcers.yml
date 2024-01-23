@@ -13,6 +13,12 @@ sources:
       - name: partsupp
       - name: region
       - name: supplier
+  - name: raw
+    database: raw
+    schema: stages
+    tables:
+      - name: orders
+      - name: lineitem
   - name: elementary
     database: analytics
     schema: analytics_engineering_data_pipeline_elementary

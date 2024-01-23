@@ -13,6 +13,6 @@
     select *,
     {{ dbt_utils.generate_surrogate_key(['l_orderkey', 'l_linenumber'])}} as lineitemkey,
     {{ dbt_utils.generate_surrogate_key(['l_partkey', 'l_suppkey'])}} as partsuppkey
-    from {{ source('tpch_sf1', 'lineitem') }}
+    from {{ source('raw', 'lineitem') }}
 
 {% endsnapshot %}
