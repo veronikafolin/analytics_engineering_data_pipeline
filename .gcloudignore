@@ -9,3 +9,5 @@ target
 docs
 dags_backup
 models_backup
+dashboards
+data_ingestion
