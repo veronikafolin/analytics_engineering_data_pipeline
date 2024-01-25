@@ -1,5 +1,6 @@
 from snowflake import connector
 
+
 def load_data_to_snowflake(data, context):
 
     file_name = data['name']
