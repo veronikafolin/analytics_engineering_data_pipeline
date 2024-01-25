@@ -38,11 +38,11 @@ def load_data_to_snowflake(data, context):
     elif "orders" in file_name:
         command = f"COPY INTO orders FROM @{snowflake_stage}/{file_name}"
         cursor.execute(command)
-    elif "part" in file_name:
-        command = f"COPY INTO part FROM @{snowflake_stage}/{file_name}"
-        cursor.execute(command)
     elif "partsupp" in file_name:
         command = f"COPY INTO partsupp FROM @{snowflake_stage}/{file_name}"
+        cursor.execute(command)
+    elif "part" in file_name:
+        command = f"COPY INTO part FROM @{snowflake_stage}/{file_name}"
         cursor.execute(command)
     elif "region" in file_name:
         command = f"COPY INTO region FROM @{snowflake_stage}/{file_name}"
