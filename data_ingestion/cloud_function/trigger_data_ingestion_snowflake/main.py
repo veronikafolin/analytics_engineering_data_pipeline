@@ -10,7 +10,7 @@ def load_data_to_snowflake(data, context):
     snowflake_password = 'zyvpoz-Rigsam-0cojgu'
     snowflake_warehouse = 'transforming'
     snowflake_database = 'raw'
-    snowflake_schema = 'stages'
+    snowflake_schema = 'analytics_engineering_data_pipeline'
     snowflake_stage = 'my_gcs_stage'
 
     # Snowflake connection
