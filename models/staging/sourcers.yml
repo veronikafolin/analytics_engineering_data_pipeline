@@ -15,7 +15,7 @@ sources:
       - name: supplier
   - name: raw
     database: raw
-    schema: stages
+    schema: analytics_engineering_data_pipeline
     tables:
       - name: orders
       - name: lineitem
