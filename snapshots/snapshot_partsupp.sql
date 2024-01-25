@@ -11,6 +11,6 @@
     }}
 
     select *, {{ dbt_utils.generate_surrogate_key(['ps_partkey', 'ps_suppkey'])}} as partsuppkey
-    from {{ source('tpch_sf1', 'partsupp') }}
+    from {{ source('raw', 'partsupp') }}
 
 {% endsnapshot %}

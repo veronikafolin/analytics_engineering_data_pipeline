@@ -5,4 +5,4 @@ select
     ps_availqty as availqty,
     ps_supplycost as supplycost
 
-from {{ source('tpch_sf1', 'partsupp') }}
+from {{ source('raw', 'partsupp') }}

@@ -10,6 +10,6 @@
         )
     }}
 
-    select * from {{ source('tpch_sf1', 'part') }}
+    select * from {{ source('raw', 'part') }}
 
 {% endsnapshot %}

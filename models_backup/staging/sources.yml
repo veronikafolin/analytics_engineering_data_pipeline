@@ -1,9 +1,9 @@
 version: 2
 
 sources:
-  - name: tpch_sf1
-    database: snowflake_sample_data
-    schema: tpch_sf1
+  - name: raw
+    database: raw
+    schema: analytics_engineering_data_pipeline
     tables:
       - name: customer
       - name: lineitem

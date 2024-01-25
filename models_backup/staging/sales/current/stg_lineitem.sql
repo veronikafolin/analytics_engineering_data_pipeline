@@ -17,4 +17,4 @@ select
     l_shipinstruct as shipinstruct,
     l_shipmode as shipmode
 
-from {{ source('tpch_sf1', 'lineitem') }}
+from {{ source('raw', 'lineitem') }}

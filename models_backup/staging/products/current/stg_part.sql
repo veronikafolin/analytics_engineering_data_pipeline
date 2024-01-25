@@ -8,4 +8,4 @@ select
     p_container as container,
     p_retailprice as retailprice
 
-from {{ source('tpch_sf1', 'part') }}
+from {{ source('raw', 'part') }}

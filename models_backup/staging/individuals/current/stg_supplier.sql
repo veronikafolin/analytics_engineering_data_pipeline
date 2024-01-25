@@ -4,4 +4,4 @@ select
     s_nationkey as nationkey,
     s_acctbal as supp_acctbal
 
-from {{ source('tpch_sf1', 'supplier') }}
+from {{ source('raw', 'supplier') }}

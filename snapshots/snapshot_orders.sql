@@ -12,6 +12,5 @@
 
     select *
     from {{ source('raw', 'orders') }}
---    from {{ source('tpch_sf1', 'orders') }}
 
 {% endsnapshot %}
