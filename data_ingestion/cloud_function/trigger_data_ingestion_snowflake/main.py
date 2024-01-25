@@ -2,7 +2,6 @@ from snowflake import connector
 
 
 def load_data_to_snowflake(data, context):
-
     file_name = data['name']
 
     # Snowflake connection parameters
@@ -27,14 +26,32 @@ def load_data_to_snowflake(data, context):
     # Execute Snowflake COPY command to load data
     cursor = connection.cursor()
 
-    if "orders" in file_name:
-        command = f"COPY INTO orders FROM @{snowflake_stage}/{file_name}"
+    if "customer" in file_name:
+        command = f"COPY INTO customer FROM @{snowflake_stage}/{file_name}"
         cursor.execute(command)
     elif "lineitem" in file_name:
         command = f"COPY INTO lineitem FROM @{snowflake_stage}/{file_name}"
         cursor.execute(command)
+    elif "nation" in file_name:
+        command = f"COPY INTO nation FROM @{snowflake_stage}/{file_name}"
+        cursor.execute(command)
+    elif "orders" in file_name:
+        command = f"COPY INTO orders FROM @{snowflake_stage}/{file_name}"
+        cursor.execute(command)
+    elif "part" in file_name:
+        command = f"COPY INTO part FROM @{snowflake_stage}/{file_name}"
+        cursor.execute(command)
+    elif "partsupp" in file_name:
+        command = f"COPY INTO partsupp FROM @{snowflake_stage}/{file_name}"
+        cursor.execute(command)
+    elif "region" in file_name:
+        command = f"COPY INTO region FROM @{snowflake_stage}/{file_name}"
+        cursor.execute(command)
+    elif "supplier" in file_name:
+        command = f"COPY INTO supplier FROM @{snowflake_stage}/{file_name}"
+        cursor.execute(command)
     else:
-        print("File name not recognised.")    
-    
+        print("File name not recognised.")
+
     cursor.close()
     connection.close()
