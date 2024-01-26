@@ -20,7 +20,7 @@ jobs:
           if [ ! -d "docs" ]; then 
             mkdir docs
           fi
-          cp -r target/. docs/
+          cp -r target/. docs/dbt/
 
 #      - name: Delete target directory
 #        run: |
