@@ -1,22 +1,11 @@
-# Demo on DBT Core + Snowflake
+# Simulation of a Data Pipeline for Analytics Engineering
 
-The database used is made available on Snowflake (Snowsight), after registering an account.
+## Goal
 
-Dataset documentation: https://docs.snowflake.com/en/user-guide/sample-data-tpch
+## Architecture 
 
-## Setup
-* Clone the repository
-* Create a [Trial Account](https://signup.snowflake.com/) in Snowflake
-* [Setup](https://docs.getdbt.com/docs/core/connect-data-platform/snowflake-setup) the connection with the data platform
-  with the method you prefer
-* `dbt deps` to install packages specified in `packages.yml`
+## Documentation
 
-## Usage
+## Author
 
-Try running the following commands:
-- `dbt run`
-- `dbt run --m volume_orders --vars {"groupBy": ["cust_mktsegment", "cust_nation_name"], "filters": ["cust_region_name = 'AMERICA'"]}`
-- `dbt test`
-- `dbt build`
-- `dbt build -m <model_name>`
-- `dbt docs generate`
+Veronika Folin - veronika.folin@studio.unibo.it, v.folin@reply.it
