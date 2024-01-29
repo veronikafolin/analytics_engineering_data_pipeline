@@ -12,6 +12,8 @@ dataquality:
     filters: [ ]
   render_template_as_native_obj: True
   tasks:
+    dbt_test:
+      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
     dbt_seed_test_tags:
       operator: airflow_dbt.operators.dbt_operator.DbtSeedOperator
       select: 'test_tags'
@@ -24,9 +26,11 @@ dataquality:
     dbt_run_stg_dbt_tests:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_dbt_tests'
+      dependencies: [ dbt_test ]
     dbt_run_stg_elementary_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_elementary_test_results'
+      dependencies: [ dbt_test ]
     dbt_run_fct_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'fct_test_results'

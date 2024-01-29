@@ -35,19 +35,11 @@ fct_orders:
       models: 'registry_stg_orders'
       full_refresh: True
       dependencies: [ branch_on_registry_stg_orders_initialization ]
-    dbt_test_registry_stg_orders:
-      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_stg_orders'
-      trigger_rule: 'none_failed'
-      dependencies: [ dbt_run_registry_stg_orders, dbt_run_registry_stg_orders_full_refresh ]
     dbt_run_fct_orders:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'fct_orders'
-      dependencies: [ dbt_test_registry_stg_orders ]
-    dbt_test_fct_orders:
-      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'fct_orders'
-      dependencies: [ dbt_run_fct_orders ]
+      trigger_rule: 'none_failed'
+      dependencies: [ dbt_run_registry_stg_orders, dbt_run_registry_stg_orders_full_refresh ]
 fct_sales:
   default_args:
     owner: 'v.folin@reply.it'
@@ -85,16 +77,8 @@ fct_sales:
       models: 'registry_stg_lineitem'
       full_refresh: True
       dependencies: [ branch_on_registry_stg_lineitem_initialization ]
-    dbt_test_registry_stg_lineitem:
-      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'registry_stg_lineitem'
-      trigger_rule: 'none_failed'
-      dependencies: [ dbt_run_registry_stg_lineitem, dbt_run_registry_stg_lineitem_full_refresh ]
     dbt_run_fct_sales:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'fct_sales'
-      dependencies: [ dbt_test_registry_stg_lineitem ]
-    dbt_test_fct_sales:
-      operator: airflow_dbt.operators.dbt_operator.DbtTestOperator
-      models: 'fct_sales'
-      dependencies: [ dbt_run_fct_sales ]
+      trigger_rule: 'none_failed'
+      dependencies: [ dbt_run_registry_stg_lineitem, dbt_run_registry_stg_lineitem_full_refresh ]
