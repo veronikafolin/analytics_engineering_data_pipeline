@@ -1,8 +1,7 @@
 {{config (
     cluster_by=['partition_date'],
     materialized='incremental',
-    on_schema_change='append_new_columns',
-    post_hook='delete from {{this}} {{apply_retention_mechanism(8)}}'
+    on_schema_change='append_new_columns'
 )}}
 
 with
