@@ -19,3 +19,7 @@ setup_project:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeOperator
       sql: create_incremental_tables.sql
       dependencies: [ dbt_deps ]
+    dbt_run_elementary:
+      operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
+      select: 'elementary'
+      dependencies: [ create_incremental_tables ]
