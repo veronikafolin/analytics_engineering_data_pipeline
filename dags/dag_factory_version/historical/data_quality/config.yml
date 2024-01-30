@@ -26,10 +26,12 @@ dataquality:
     dbt_run_stg_dbt_tests:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_dbt_tests'
+      trigger_rule: 'all_done'
       dependencies: [ dbt_test ]
     dbt_run_stg_elementary_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_elementary_test_results'
+      trigger_rule: 'all_done'
       dependencies: [ dbt_test ]
     dbt_run_fct_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
