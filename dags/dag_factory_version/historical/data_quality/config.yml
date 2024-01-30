@@ -2,7 +2,7 @@ dataquality:
   default_args:
     owner: 'v.folin@reply.it'
     start_date: 2023-01-07
-    retries: 1
+    retries: 0
     retry_delay_sec: 60
   schedule_interval: None
   dagrun_timeout_sec: 3600
