@@ -17,7 +17,7 @@ fct_orders:
       sql: |
         SELECT ROW_COUNT
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
-        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        WHERE  table_schema = 'ANALYTICS_ENGINEERING_DATA_PIPELINE'
         AND    table_name   = 'REGISTRY_STG_ORDERS'
     branch_on_registry_stg_orders_initialization:
       operator: airflow.operators.python.BranchPythonOperator
@@ -59,7 +59,7 @@ fct_sales:
       sql: |
         SELECT ROW_COUNT
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
-        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        WHERE  table_schema = 'ANALYTICS_ENGINEERING_DATA_PIPELINE'
         AND    table_name   = 'REGISTRY_STG_LINEITEM'
     branch_on_registry_stg_lineitem_initialization:
       operator: airflow.operators.python.BranchPythonOperator

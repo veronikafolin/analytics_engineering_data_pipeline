@@ -17,7 +17,7 @@ dim_part:
       sql: |
         SELECT ROW_COUNT
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
-        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        WHERE  table_schema = 'ANALYTICS_ENGINEERING_DATA_PIPELINE'
         AND    table_name   = 'REGISTRY_STG_PART'
     branch_on_registry_stg_part_initialization:
       operator: airflow.operators.python.BranchPythonOperator
@@ -59,7 +59,7 @@ fct_inventory:
       sql: |
         SELECT ROW_COUNT
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
-        WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+        WHERE  table_schema = 'ANALYTICS_ENGINEERING_DATA_PIPELINE'
         AND    table_name   = 'REGISTRY_STG_PARTSUPP'
     branch_on_registry_stg_partsupp_initialization:
       operator: airflow.operators.python.BranchPythonOperator

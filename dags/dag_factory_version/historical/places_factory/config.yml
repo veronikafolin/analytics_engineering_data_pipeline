@@ -14,7 +14,7 @@ int_nation:
       sql: |
         SELECT EXISTS (
             SELECT * FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
-            WHERE  table_schema = 'DBT_CORE_REUSABLE_DEMO'
+            WHERE  table_schema = 'ANALYTICS_ENGINEERING_DATA_PIPELINE'
             AND    table_name   = 'INT_NATION' );
     branch_on_int_nation_existence:
       operator: airflow.operators.python.BranchPythonOperator
