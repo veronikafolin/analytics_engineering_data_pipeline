@@ -22,10 +22,10 @@ previous_state_of_registry as (
 
 final as (
     select
-        COALESCE(new.s_suppkey, old.suppkey) as suppkey,
-        COALESCE(new.s_name, old.supp_name) as supp_name,
-        COALESCE(new.s_nationkey, old.nationkey) as nationkey,
-        COALESCE(new.s_acctbal, old.supp_acctbal) as supp_acctbal,
+        IFF(new.s_suppkey is null, old.suppkey, new.s_suppkey) as suppkey,
+        IFF(new.s_suppkey is null, old.supp_name, new.s_name) as supp_name,
+        IFF(new.s_suppkey is null, old.nationkey, new.s_nationkey) as nationkey,
+        IFF(new.s_suppkey is null, old.supp_acctbal, new.s_acctbal) as supp_acctbal,
         CURRENT_DATE() as partition_date
     from last_snapshot as new FULL OUTER JOIN previous_state_of_registry as old ON new.s_suppkey = old.suppkey
 )

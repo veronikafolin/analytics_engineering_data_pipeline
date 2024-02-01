@@ -22,14 +22,14 @@ previous_state_of_registry as (
 
 final as (
     select
-        COALESCE(new.p_partkey, old.partkey) as partkey,
-        COALESCE(new.p_name, old.name) as name,
-        COALESCE(new.p_mfgr, old.manufacturer) as manufacturer,
-        COALESCE(new.p_brand, old.brand) as brand,
-        COALESCE(new.p_type, old.type) as type,
-        COALESCE(new.p_size, old.productsize) as productsize,
-        COALESCE(new.p_container, old.container) as container,
-        COALESCE(new.p_retailprice, old.retailprice) as retailprice,
+        IFF(new.p_partkey is null, old.partkey, new.p_partkey) as partkey,
+        IFF(new.p_partkey is null, old.name, new.p_name) as name,
+        IFF(new.p_partkey is null, old.manufacturer, new.p_mfgr) as manufacturer,
+        IFF(new.p_partkey is null, old.brand, new.p_brand) as brand,
+        IFF(new.p_partkey is null, old.type, new.p_type) as type,
+        IFF(new.p_partkey is null, old.productsize, new.p_size) as productsize,
+        IFF(new.p_partkey is null, old.container, new.p_container) as container,
+        IFF(new.p_partkey is null, old.retailprice, new.p_retailprice) as retailprice,
         CURRENT_DATE() as partition_date
     from last_snapshot as new FULL OUTER JOIN previous_state_of_registry as old ON new.p_partkey = old.partkey
 )

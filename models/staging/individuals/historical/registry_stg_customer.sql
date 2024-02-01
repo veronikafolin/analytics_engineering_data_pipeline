@@ -22,11 +22,11 @@ previous_state_of_registry as (
 
 final as (
     select
-            COALESCE(new.c_custkey, old.custkey) as custkey,
-            COALESCE(new.c_name, old.cust_name) as cust_name,
-            COALESCE(new.c_nationkey, old.nationkey) as nationkey,
-            COALESCE(new.c_acctbal, old.cust_acctbal) as cust_acctbal,
-            COALESCE(new.c_mktsegment, old.cust_mktsegment) as cust_mktsegment,
+            IFF(new.c_custkey is null, old.custkey, new.c_custkey) as custkey,
+            IFF(new.c_custkey is null, old.cust_name, new.c_name) as cust_name,
+            IFF(new.c_custkey is null, old.nationkey, new.c_nationkey) as nationkey,
+            IFF(new.c_custkey is null, old.cust_acctbal, new.c_acctbal) as cust_acctbal,
+            IFF(new.c_custkey is null, old.cust_mktsegment, new.c_mktsegment) as cust_mktsegment,
             CURRENT_DATE() as partition_date
         from last_snapshot as new FULL OUTER JOIN previous_state_of_registry as old ON new.c_custkey = old.custkey
 )

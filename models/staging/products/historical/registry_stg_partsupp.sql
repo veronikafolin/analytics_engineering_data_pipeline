@@ -22,11 +22,11 @@ previous_state_of_registry as (
 
 final as (
     select
-        COALESCE(new.partsuppkey, old.partsuppkey) as partsuppkey,
-        COALESCE(new.ps_partkey, old.partkey) as partkey,
-        COALESCE(new.ps_suppkey, old.suppkey) as suppkey,
-        COALESCE(new.ps_availqty, old.availqty) as availqty,
-        COALESCE(new.ps_supplycost, old.supplycost) as supplycost,
+        IFF(new.partsuppkey is null, old.partsuppkey, new.partsuppkey) as partsuppkey,
+        IFF(new.partsuppkey is null, old.partkey, new.ps_partkey) as partkey,
+        IFF(new.partsuppkey is null, old.suppkey, new.ps_suppkey) as suppkey,
+        IFF(new.partsuppkey is null, old.availqty, new.ps_availqty) as availqty,
+        IFF(new.partsuppkey is null, old.supplycost, new.ps_supplycost) as supplycost,
         CURRENT_DATE() as partition_date
     from last_snapshot as new FULL OUTER JOIN previous_state_of_registry as old ON new.partsuppkey = old.partsuppkey
 )

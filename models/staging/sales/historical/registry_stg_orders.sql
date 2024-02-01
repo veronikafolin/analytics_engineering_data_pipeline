@@ -22,14 +22,14 @@ previous_state_of_registry as (
 
 final as (
     select
-        COALESCE(new.o_orderkey, old.orderkey) as orderkey,
-        COALESCE(new.o_custkey, old.custkey) as custkey,
-        COALESCE(new.o_orderstatus, old.orderstatus) as orderstatus,
-        COALESCE(new.o_totalprice, old.totalprice) as totalprice,
-        COALESCE(new.o_orderdate, old.orderdate) as orderdate,
-        COALESCE(new.o_orderpriority, old.orderpriority) as orderpriority,
-        COALESCE(new.o_clerk, old.clerk) as clerk,
-        COALESCE(new.o_shippriority, old.shippriority) as shippriority,
+        IFF(new.o_orderkey is null, old.orderkey, new.o_orderkey) as orderkey,
+        IFF(new.o_orderkey is null, old.custkey, new.o_custkey) as custkey,
+        IFF(new.o_orderkey is null, old.orderstatus, new.o_orderstatus) as orderstatus,
+        IFF(new.o_orderkey is null, old.totalprice, new.o_totalprice) as totalprice,
+        IFF(new.o_orderkey is null, old.orderdate, new.o_orderdate) as orderdate,
+        IFF(new.o_orderkey is null, old.orderpriority, new.o_orderpriority) as orderpriority,
+        IFF(new.o_orderkey is null, old.clerk, new.o_clerk) as clerk,
+        IFF(new.o_orderkey is null, old.shippriority, new.o_shippriority) as shippriority,
         CURRENT_DATE() as partition_date
     from last_snapshot as new FULL OUTER JOIN previous_state_of_registry as old ON new.o_orderkey = old.orderkey
 )
