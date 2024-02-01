@@ -85,7 +85,26 @@
 
     <div class="description">
         <h2>Goal</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida justo vitae justo accumsan, et fermentum libero pellentesque.</p>
+        <div style="width: 70%; margin: 0 auto;">
+            <p>
+                The goal of the project was to design, implement, test and document a solution that uses the <strong>Data Build Tool (DBT)</strong> data transformation framework in combination with the <strong>Snowflake</strong> data management system in the <strong>Google Cloud Platform</strong> cloud environment.
+            </p>
+            <ul style="list-style-type: disc; text-align: left;">
+                <li>Automatically manage data ingestion from Cloud Storage to Snowflake.</li>
+                <li>Collect raw data on Snowflake in a format suitable for the transformation process.</li>
+                <li>Transform, test and document data using the DBT tool. This process allows you to clean, normalize, enrich and prepare data for analysis and reporting.</li>
+                <li>Monitor the transformation process using the Elementary package and configure Slack Alerts in case of errors.</li>
+                <li>Collect transformed data on Snowflake.</li>
+                <li>Orchestrate the transformation process using Cloud Composer and receive alerts (emails), via the SendGrid service, when the workflow fails.</li>
+                <li>View and analyze the transformed data using the Looker Studio dashboarding tool, as well as monitor its data quality.</li>
+                <li>Manage automatically via GitHub Actions:
+                    <ul style="list-style-type: circle; text-align: left;">
+                        <li>Synchronization between the project repository and the execution environment that orchestrates the transformation process.</li>
+                        <li>The deployment of the documentation produced in a GitHub Pages.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
         <h2>Architecture</h2>
         <img src="AEDP.png" alt="AEDP Architecture">
     </div>
