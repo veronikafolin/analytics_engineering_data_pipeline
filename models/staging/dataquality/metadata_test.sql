@@ -1,8 +1,17 @@
+{{
+    config(
+        cluster_by=['partition_date'],
+        materialized='incremental',
+        on_schema_change='append_new_columns'
+    )
+}}
+
 with
 
 previous_state_of_metadata as (
     select *
     from {{this}}
+    where partition_date = (select MAX(partition_date) from {{this}})
 ),
 
 new_state_of_metadata as (
@@ -22,8 +31,15 @@ metadata_tables as (
             (COALESCE(new.row_count, 0) - COALESCE(old.row_count, 0)) = 0,
             COALESCE(new.row_count, 0),
             (COALESCE(new.row_count, 0) - COALESCE(old.row_count, 0))
-        ) as row_count_delta
+        ) as row_count_delta,
+        CURRENT_DATE() as partition_date
     from new_state_of_metadata as new left join previous_state_of_metadata as old on (TABLE_REF = old.TABLE_REF)
 )
 
 select * from metadata_tables
+
+{% if is_incremental() %}
+
+  where partition_date > (select max(partition_date) from {{ this }})
+
+{% endif %}

@@ -1,3 +1,10 @@
+{{config (
+    cluster_by=['partition_date'],
+    materialized='incremental',
+    on_schema_change='append_new_columns',
+    post_hook='delete from {{this}} {{apply_retention_mechanism(8)}}'
+)}}
+
 with
 
 tests as (
@@ -6,6 +13,7 @@ tests as (
 
 test_results as (
     select * from {{ref('stg_elementary_test_results')}}
+    where partition_date = (select MAX(partition_date) from {{ref('stg_elementary_test_results')}})
 ),
 
 test_tags as (
@@ -18,6 +26,7 @@ model_tags as (
 
 metadata as (
     select * from {{ref('metadata_test')}}
+    where partition_date = (select MAX(partition_date) from {{ref('metadata_test')}})
 ),
 
 final as (
@@ -46,7 +55,8 @@ final as (
         metadata.ROW_COUNT,
         metadata.ROW_COUNT_DELTA,
         test_results.FAILED_ROW_COUNT,
-        test_results.FAILED_ROW_COUNT_DELTA
+        test_results.FAILED_ROW_COUNT_DELTA,
+        CURRENT_DATE() as partition_date
     from test_results
     left join tests on (test_results.TEST_UNIQUE_ID = tests.UNIQUE_ID)
     left join test_tags on (tests.TEST_SHORT_NAME = test_tags.TEST_NAME)
@@ -55,3 +65,9 @@ final as (
 )
 
 select * from final
+
+{% if is_incremental() %}
+
+  where partition_date > (select max(partition_date) from {{ this }})
+
+{% endif %}

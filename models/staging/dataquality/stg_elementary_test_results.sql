@@ -1,8 +1,17 @@
+{{
+    config(
+        cluster_by=['partition_date'],
+        materialized='incremental',
+        on_schema_change='append_new_columns'
+    )
+}}
+
 with
 
 previous_state_of_test_results as (
     select *
     from {{this}}
+    where partition_date = (select MAX(partition_date) from {{this}})
 ),
 
 new_state_of_test_results as (
@@ -32,9 +41,16 @@ final as (
             (COALESCE(new.FAILED_ROW_COUNT, 0) - COALESCE(old.FAILED_ROW_COUNT, 0)) = 0,
             COALESCE(new.FAILED_ROW_COUNT, 0),
             (COALESCE(new.FAILED_ROW_COUNT, 0) - COALESCE(old.FAILED_ROW_COUNT, 0))
-        ) as FAILED_ROW_COUNT_DELTA
+        ) as FAILED_ROW_COUNT_DELTA,
+        CURRENT_DATE() as partition_date
     from new_state_of_test_results as new left join previous_state_of_test_results as old on (COLUMN_REF = old.COLUMN_REF)
 
 )
 
 select * from final
+
+{% if is_incremental() %}
+
+  where partition_date > (select max(partition_date) from {{ this }})
+
+{% endif %}

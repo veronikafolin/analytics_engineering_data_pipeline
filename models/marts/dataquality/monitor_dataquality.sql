@@ -2,6 +2,7 @@ with
 
 test_results as (
     select * from {{ref('fct_test_results')}}
+    where partition_date = (select MAX(partition_date) from {{ref('fct_test_results')}})
 ),
 
 final as (
