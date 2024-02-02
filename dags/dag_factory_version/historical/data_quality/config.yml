@@ -23,6 +23,7 @@ dataquality:
     dbt_run_metadata:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'metadata_test'
+      full_refresh: True
     dbt_run_stg_dbt_tests:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_dbt_tests'
@@ -32,10 +33,12 @@ dataquality:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_elementary_test_results'
       trigger_rule: 'all_done'
+      full_refresh: True
       dependencies: [ dbt_test ]
     dbt_run_fct_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'fct_test_results'
+      full_refresh: True
       dependencies: [ dbt_seed_test_tags, dbt_seed_model_tags, dbt_run_stg_dbt_tests, dbt_run_stg_elementary_test_results, dbt_run_metadata ]
     dbt_run_monitor_dataquality:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
