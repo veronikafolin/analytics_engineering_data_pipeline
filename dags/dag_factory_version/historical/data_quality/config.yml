@@ -55,6 +55,8 @@ dataquality:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'ANALYTICS_ENGINEERING_DATA_PIPELINE'
         AND    table_name   = 'STG_ELEMENTARY_TEST_RESULTS'
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_test ]
     branch_on_stg_elementary_test_results_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/data_quality/utils.py
@@ -65,14 +67,12 @@ dataquality:
     dbt_run_stg_elementary_test_results:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_elementary_test_results'
-      trigger_rule: 'all_done'
-      dependencies: [ dbt_test, branch_on_stg_elementary_test_results_initialization]
+      dependencies: [ branch_on_stg_elementary_test_results_initialization]
     dbt_run_stg_elementary_test_results_full_refresh:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'stg_elementary_test_results'
-      trigger_rule: 'all_done'
       full_refresh: True
-      dependencies: [ dbt_test, branch_on_stg_elementary_test_results_initialization ]
+      dependencies: [ branch_on_stg_elementary_test_results_initialization ]
     check_fct_test_results_initialization:
       operator: airflow.providers.snowflake.operators.snowflake.SnowflakeCheckOperator
       sql: |
@@ -80,6 +80,8 @@ dataquality:
         FROM ANALYTICS.INFORMATION_SCHEMA.TABLES
         WHERE  table_schema = 'ANALYTICS_ENGINEERING_DATA_PIPELINE'
         AND    table_name   = 'FCT_TEST_RESULTS'
+      trigger_rule: 'all_done'
+      dependencies: [ dbt_run_stg_elementary_test_results_full_refresh, dbt_run_metadata_full_refresh, dbt_run_stg_elementary_test_results, dbt_run_metadata ]
     branch_on_fct_test_results_initialization:
       operator: airflow.operators.python.BranchPythonOperator
       python_callable_file: /home/airflow/gcs/dags/dag_factory_version/historical/data_quality/utils.py
@@ -91,13 +93,12 @@ dataquality:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'fct_test_results'
       trigger_rule: 'all_done'
-      dependencies: [ dbt_seed_test_tags, dbt_seed_model_tags, dbt_run_stg_dbt_tests, branch_on_fct_test_results_initialization, dbt_run_stg_elementary_test_results, dbt_run_metadata ]
+      dependencies: [ dbt_seed_test_tags, dbt_seed_model_tags, dbt_run_stg_dbt_tests, branch_on_fct_test_results_initialization ]
     dbt_run_fct_test_results_full_refresh:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'fct_test_results'
       full_refresh: True
-      trigger_rule: 'all_done'
-      dependencies: [ dbt_seed_test_tags, dbt_seed_model_tags, dbt_run_stg_dbt_tests, branch_on_fct_test_results_initialization, dbt_run_stg_elementary_test_results_full_refresh, dbt_run_metadata_full_refresh ]
+      dependencies: [ dbt_seed_test_tags, dbt_seed_model_tags, dbt_run_stg_dbt_tests, branch_on_fct_test_results_initialization ]
     dbt_run_monitor_dataquality:
       operator: airflow_dbt.operators.dbt_operator.DbtRunOperator
       models: 'monitor_dataquality'
