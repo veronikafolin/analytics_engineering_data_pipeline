@@ -44,12 +44,14 @@ final as (
         test_results.FAILURES,
         test_results.RESULT_ROWS,
         metadata.ROW_COUNT,
-        test_results.FAILED_ROW_COUNT
+        metadata.ROW_COUNT_DELTA,
+        test_results.FAILED_ROW_COUNT,
+        test_results.FAILED_ROW_COUNT_DELTA
     from test_results
     left join tests on (test_results.TEST_UNIQUE_ID = tests.UNIQUE_ID)
     left join test_tags on (tests.TEST_SHORT_NAME = test_tags.TEST_NAME)
     left join model_tags on (test_results.TABLE_REF = model_tags.TABLE_REF)
-    left join metadata on (test_results.TABLE_NAME = metadata.TABLE_NAME)
+    left join metadata on (test_results.TABLE_REF = metadata.TABLE_REF)
 )
 
 select * from final
