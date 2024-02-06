@@ -40,7 +40,7 @@ final as (
         COALESCE(new.FAILED_ROW_COUNT, 0) as FAILED_ROW_COUNT,
         ( COALESCE(new.FAILED_ROW_COUNT, 0) - COALESCE(old.FAILED_ROW_COUNT, 0) ) as FAILED_ROW_COUNT_DELTA,
         CURRENT_DATE() as partition_date
-    from new_state_of_test_results as new left join previous_state_of_test_results as old on (new.COLUMN_REF = old.COLUMN_REF)
+    from new_state_of_test_results as new left join previous_state_of_test_results as old on (COLUMN_REF = old.COLUMN_REF)
 
 )
 
