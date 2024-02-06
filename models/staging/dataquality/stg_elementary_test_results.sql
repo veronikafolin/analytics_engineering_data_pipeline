@@ -17,6 +17,7 @@ previous_state_of_test_results as (
 new_state_of_test_results as (
     select *
     from {{ source('elementary', 'elementary_test_results') }}
+    where TO_DATE(DETECTED_AT) = (select MAX(TO_DATE(DETECTED_AT)) from {{ source('elementary', 'elementary_test_results') }})
 ),
 
 final as (
@@ -37,13 +38,9 @@ final as (
         new.DETECTED_AT as DETECTED_AT,
         TO_DATE(new.DETECTED_AT) as DETECTED_AT_DATE,
         COALESCE(new.FAILED_ROW_COUNT, 0) as FAILED_ROW_COUNT,
-        IFF(
-            (COALESCE(new.FAILED_ROW_COUNT, 0) - COALESCE(old.FAILED_ROW_COUNT, 0)) = 0,
-            COALESCE(new.FAILED_ROW_COUNT, 0),
-            (COALESCE(new.FAILED_ROW_COUNT, 0) - COALESCE(old.FAILED_ROW_COUNT, 0))
-        ) as FAILED_ROW_COUNT_DELTA,
+        ( COALESCE(new.FAILED_ROW_COUNT, 0) - COALESCE(old.FAILED_ROW_COUNT, 0) ) as FAILED_ROW_COUNT_DELTA,
         CURRENT_DATE() as partition_date
-    from new_state_of_test_results as new left join previous_state_of_test_results as old on (COLUMN_REF = old.COLUMN_REF)
+    from new_state_of_test_results as new left join previous_state_of_test_results as old on (new.COLUMN_REF = old.COLUMN_REF)
 
 )
 
