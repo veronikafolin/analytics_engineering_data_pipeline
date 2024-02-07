@@ -9,7 +9,6 @@ final as (
     select
         {{ write_select_groupByColumns_by_vars() }}
         count(distinct TEST_UNIQUE_ID) as test_count,
-        count(TEST_SHORT_NAME) as test_runs,
         sum(FAILURES) as failures_count,
         sum(ROW_COUNT) as row_count,
         sum(ROW_COUNT_DELTA) as row_count_delta,
