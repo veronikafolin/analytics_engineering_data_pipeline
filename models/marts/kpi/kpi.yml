@@ -8,9 +8,9 @@ models:
   - name: kpi_sales_fulfillment_time
     description: The average time it takes to process and deliver items.
   - name: kpi_gross_profit_margin
-    description: The percentage of revenue that represents gross profit.
+    description: The part of revenue that represents gross profit.
   - name: kpi_supplier_lead_time
-    description: The time it takes suppliers to deliver orders.
+    description: The average time it takes suppliers to deliver orders.
   - name: kpi_sales_return_rate
     description: The percentage of items that are returned by customers.
   - name: kpi_product_popularity

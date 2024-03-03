@@ -2,10 +2,10 @@ version: 2
 
 models:
   - name: sales_time
-    description: Historicized table that describes the time required to process and deliver orders.
+    description: Describes the time required to process and deliver orders.
   - name: volume_sales
-    description: Historicized table about sales' volume.
+    description: Describes sales' volume.
   - name: acquired_customer
-    description: Historicized table about customers who start to do business with you over a specific time period.
+    description: Describes customers who start to do business with you over a specific time period.
   - name: lost_customer
-    description: Historicized table about customers who stop doing business with you over a specific time period.
+    description: Describes customers who stop doing business with you over a specific time period.
